@@ -13,7 +13,7 @@ class ResultTests: StringSpec({
     }
 
     "If the result is Error, when i get the result, then it throws an Error" {
-        val x: Result<Int> = Result.Error("error")
+        val x: Result<Int> = Result.Errors("error")
         shouldThrow<ResultException> { x.get() }
     }
 
@@ -23,7 +23,7 @@ class ResultTests: StringSpec({
     }
 
     "If the result is Error, when i get the result or default, then it returns the default" {
-        val x: Result<Int> = Result.Error("bla")
+        val x: Result<Int> = Result.Errors("bla")
         x.ifError(2) shouldBe 2
     }
 
@@ -33,7 +33,7 @@ class ResultTests: StringSpec({
     }
 
     "Mapping an Error result, when i get the result, then it throws an Error" {
-        val x: Result<Int> = Result.Error("error").map { x: Int -> x + 1 }
+        val x: Result<Int> = Result.Errors("error").map { x: Int -> x + 1 }
         shouldThrow<ResultException> { x.get() }
     }
 
@@ -43,20 +43,20 @@ class ResultTests: StringSpec({
     }
 
     "FlatMapping an Error result, when i get the result, then it throws an Error" {
-        val x: Result<Int> = Result.Error("error").flatMap { x: Int -> Result.Ok(x + 1) }
+        val x: Result<Int> = Result.Errors("error").flatMap { x: Int -> Result.Ok(x + 1) }
         shouldThrow<ResultException> { x.get() }
     }
 
     "FlatMapping an Ok result with a function that returns an error, when i get the result, then it throws an Error" {
-        val x: Result<Int> = Result.Ok(1).flatMap { x: Int -> Result.Error("banana") }
+        val x: Result<Int> = Result.Ok(1).flatMap { x: Int -> Result.Errors("banana") }
         val ex = shouldThrow<ResultException> { x.get() }
-        ex.error.description shouldBe "banana"
+        ex.errors.error.description shouldBe "banana"
     }
 
     "FlatMapping an Error result with a function that returns an error, when i get the result, then it throws the first Error" {
-        val x: Result<Int> = Result.Error("error1").flatMap { x: Int -> Result.Error("banana") }
+        val x: Result<Int> = Result.Errors("error1").flatMap { x: Int -> Result.Errors("banana") }
         val ex = shouldThrow<ResultException> { x.get() }
-        ex.error.description shouldBe "error1"
+        ex.errors.error.description shouldBe "error1"
     }
 
     "A lifted function can be applied" {
