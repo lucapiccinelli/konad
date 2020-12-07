@@ -72,6 +72,14 @@ class ResultTests: StringSpec({
 
         y.ifError { errors -> errors.toList().joinToString(",") { it.description } } shouldBe "fn error,value error"
     }
+
+    "null to Result: value should convert to Ok"{
+        1.toResult("error") shouldBe Result.Ok(1)
+    }
+
+    "null to Result: value should convert to null"{
+        null.toResult("error") shouldBe Result.Errors("error")
+    }
 })
 
 
