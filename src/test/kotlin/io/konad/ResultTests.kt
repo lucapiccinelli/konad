@@ -48,13 +48,13 @@ class ResultTests: StringSpec({
     }
 
     "FlatMapping an Ok result with a function that returns an error, when i get the result, then it throws an Error" {
-        val x: Result<Int> = Result.Ok(1).flatMap { x: Int -> Result.Errors("banana") }
+        val x: Result<Int> = Result.Ok(1).flatMap { Result.Errors("banana") }
         val ex = shouldThrow<ResultException> { x.get() }
         ex.errors.error.description shouldBe "banana"
     }
 
     "FlatMapping an Error result with a function that returns an error, when i get the result, then it throws the first Error" {
-        val x: Result<Int> = Result.Errors("error1").flatMap { x: Int -> Result.Errors("banana") }
+        val x: Result<Int> = Result.Errors("error1").flatMap { Result.Errors("banana") }
         val ex = shouldThrow<ResultException> { x.get() }
         ex.errors.error.description shouldBe "error1"
     }
@@ -70,7 +70,7 @@ class ResultTests: StringSpec({
         val liftedFn: Result<(Int) -> Int> = Result.Errors("fn error")
         val y: Result<Int> = Result.Errors("value error").ap(liftedFn)
 
-        y.ifError { errors -> errors.toList().map{ it.description }.joinToString(",") } shouldBe "fn error,value error"
+        y.ifError { errors -> errors.toList().joinToString(",") { it.description } } shouldBe "fn error,value error"
     }
 })
 
