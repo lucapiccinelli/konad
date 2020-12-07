@@ -38,12 +38,12 @@ class ApplicativeBuildersTests : StringSpec({
 
     "When building a Result of a Person from intermediate error results and Ok result, then the errors get accumulated as expected" {
         val error1 = Result.Errors("banana")
-        val error2 = Result.Ok(1)
+        val value = Result.Ok(1)
         val error3 = Result.Errors("pear")
 
         val person: Result<Person> = ::Person.curry()
             .on(error1)
-            .on(error2)
+            .on(value)
             .on(error3)
             .result
 
