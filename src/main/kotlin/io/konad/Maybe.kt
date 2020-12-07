@@ -14,6 +14,7 @@ class Maybe<out T> private constructor(private val value: T?):
     companion object{
         private fun <T> Kind<MaybeOf, T>.downcast() = this as Maybe<T>
 
+        fun <T> pure(value: T) = Maybe(value)
         fun <T> T?.toMaybe(): ApplicativeFunctorKind<MaybeOf, T> = Maybe(this)
         fun <T> Kind<MaybeOf, T>.toNullable(): T? = downcast().value
     }

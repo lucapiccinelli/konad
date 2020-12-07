@@ -65,6 +65,13 @@ class ResultTests: StringSpec({
 
         y.get() shouldBe 2
     }
+
+    "Applying a function in error status to an Error result, the errors gets accumulated" {
+        val liftedFn: Result<(Int) -> Int> = Result.Errors("fn error")
+        val y: Result<Int> = Result.Errors("value error").ap(liftedFn)
+
+        y.ifError { errors -> errors.toList().map{ it.description }.joinToString(",") } shouldBe "fn error,value error"
+    }
 })
 
 
