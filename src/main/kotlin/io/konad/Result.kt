@@ -1,8 +1,9 @@
 package io.konad
 
 import io.konad.exceptions.ResultException
+import io.konad.hkt.Kind
 
-sealed class Result<out T>{
+sealed class Result<out T>: Kind<ResultOf, T>{
 
     data class Ok<T>(val value: T): Result<T>()
     data class Error(val description: String): Result<Nothing>()
@@ -32,3 +33,7 @@ fun <T> Result<T>.ifError(errorHandler: (Result.Error) -> T) = when(this){
     is Result.Ok -> value
     is Result.Error -> errorHandler(this)
 }
+
+open class ResultOf
+val <T> Kind<ResultOf, T>.result
+    get() = this as Result<T>
