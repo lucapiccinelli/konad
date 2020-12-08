@@ -15,8 +15,10 @@ class Maybe<out T> private constructor(private val value: T?):
         private fun <T> Kind<MaybeOf, T>.downcast() = this as Maybe<T>
 
         fun <T> pure(value: T) = Maybe(value)
-        fun <T> T?.toMaybe(): ApplicativeFunctorKind<MaybeOf, T> = Maybe(this)
-        fun <T> Kind<MaybeOf, T>.toNullable(): T? = downcast().value
+        val <T> T?.maybe: ApplicativeFunctorKind<MaybeOf, T>
+            get() = Maybe(this)
+        val <T> Kind<MaybeOf, T>.nullable: T?
+            get() = downcast().value
     }
 
     private inline fun <R> map(fn: (T) -> R): Maybe<R> = flatMap{ Maybe(fn(it)) }
