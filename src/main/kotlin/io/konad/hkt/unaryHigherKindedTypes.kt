@@ -8,7 +8,7 @@ interface FunctorKind<F, out T>: Kind<F, T>{
 }
 
 interface ApplicativeFunctorKind<F, out T>: FunctorKind<F, T>{
-    fun <R> apK(liftedFn: FunctorKind<F, (T) -> R>): FunctorKind<F, R>
+    fun <R> apK(liftedFn: FunctorKind<F, (T) -> R>): ApplicativeFunctorKind<F, R>
 }
 
 interface MonadKind<F, out T>: FunctorKind<F, T>{

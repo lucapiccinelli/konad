@@ -30,5 +30,5 @@ class Maybe<out T> private constructor(private val value: T?):
 
     override fun <R> flatMapK(fn: (T) -> MonadKind<MaybeOf, R>): MonadKind<MaybeOf, R> = flatMap { fn(it).downcast() }
     override fun <R> mapK(fn: (T) -> R): FunctorKind<MaybeOf, R> = map(fn)
-    override fun <R> apK(liftedFn: FunctorKind<MaybeOf, (T) -> R>): FunctorKind<MaybeOf, R> = ap(liftedFn.downcast())
+    override fun <R> apK(liftedFn: FunctorKind<MaybeOf, (T) -> R>): ApplicativeFunctorKind<MaybeOf, R> = ap(liftedFn.downcast())
 }
