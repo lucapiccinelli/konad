@@ -14,7 +14,7 @@ Also, Arrow is a real functional library, with a plenty of functional concepts t
 
 Here it comes Konad. It has only two classes:
  - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be Ok or Errors.
- - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the below description, it will get clear why we need it)
+ - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the description below, it will get clear why we need it)
  
 Konad exists **with the only purpose** to let you easily compose those two classes.
 
@@ -62,6 +62,9 @@ In order to compose them and get a Result<User> you have to do
     }.run { println(this) } // This is going to print "foo.bar doesn't match an email format - xxx should match a valid phone number, but it doesn't
 
 ```
+
+## The functional style.
+
 
 For those that are in love with the functional naming, you can choose this other style
 
