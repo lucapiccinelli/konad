@@ -13,10 +13,10 @@ Also, Arrow is a real functional library, with a plenty of functional concepts t
 ## Konad to the OOP rescue
 
 Here it comes Konad. It has only two classes:
- - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be Ok or Errors.
- - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the description below, it will get clear why we need it)
+ - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
+ - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
  
-Konad exists **with the only purpose** to let you easily compose those two classes.
+Konad exists **with the only purpose** to let you easily compose these two classes.
 
 ## Usage example
 
@@ -63,10 +63,11 @@ In order to compose them and get a Result<User> you have to do
 
 ```
 
-## The functional style.
+## The pure functional style.
 
-
-For those that are in love with the functional naming, you can choose this other style
+Composition happens thanks to concepts named **Functors** and **Applicative Functors**.
+I chose to stay simple and practical, then all the methods that implement composition are called `on`. (See [applicativeBuilders.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt))
+However, for those who love the functional naming, you can choose this other style. (See [applicativeBuildersPureStyle.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuildersPureStyle.kt))
 
 ```kotlin
 
@@ -78,3 +79,62 @@ For those that are in love with the functional naming, you can choose this other
         .result
 
 ```
+
+<a name="maybe"></a>
+## Maybe
+
+`Maybe` is needed only to wrap Kotlin *nullables* and bring them to a **higher-kinded type** (see [unaryHigherKindedTypes.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)). In this way `on` can be used to compose nullables. 
+
+Its constructor is private because **you should avoid using it** in order
+to express *optionality*. Kotlin nullability is perfect for that purpose.
+
+If ever you tried to compose *nullables* in Kotlin, then probably you ended up having something like the following
+
+```kotlin
+
+val foo: Int? = 1
+val bar: String? = "2"
+val baz: Float? = 3.0f
+
+fun useThem(x: Int, y: String, z: Float): Int = x + y.toInt() + z.toInt()
+
+val result1: Int? = foo
+    ?.let { bar
+    ?.let { baz
+    ?.let { useThem(foo, bar, baz) } } }
+
+// or
+
+val result2: Int? = if(foo != null && bar != null && baz != null) 
+    useThem(foo, bar, baz) 
+    else null
+
+```
+
+This is not very clean. And it gets even worse if would like to give an error message when a `null` happens.
+
+Using Konad, nullables can be composed as follows 
+
+```kotlin
+
+val result: Int? = ::useThem.curry() 
+    .on(foo.maybe) 
+    .on(bar.maybe) 
+    .on(baz.maybe)
+    .nullable
+
+```
+
+or you can choose to give an explanatory message when something is `null`
+
+```kotlin
+
+val result: Result<Int> = ::useThem.curry() 
+    .on(foo.ifNull("Foo should not be null")) 
+    .on(bar.ifNull("Bar should not be null")) 
+    .on(baz.ifNull("Baz should not be null"))
+    .result
+
+```
+
+... WIP ...
