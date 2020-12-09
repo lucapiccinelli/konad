@@ -1,9 +1,10 @@
-package io.konad.usage.examples.model
+package io.konad.usage.examples
 
 import io.konad.*
 import io.konad.Maybe.Companion.maybe
 import io.konad.Maybe.Companion.nullable
 import io.konad.applicative.builders.*
+import io.konad.usage.examples.model.*
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

@@ -14,7 +14,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         constructor(description: String) : this(Error(description))
 
         fun toList(): Collection<Error> = (prev
-            ?.let { prev.toList() }
+            ?.run { toList() }
             ?: emptyList()) +
             listOf(error)
     }
