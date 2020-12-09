@@ -1,10 +1,9 @@
 package io.konad.usage.examples.model
 
-import io.konad.Result
+import io.konad.*
+import io.konad.Maybe.Companion.maybe
+import io.konad.Maybe.Companion.nullable
 import io.konad.applicative.builders.*
-import io.konad.curry
-import io.konad.result
-import io.konad.ifNull
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -61,7 +60,7 @@ class CreateNewUserTests : StringSpec({
         user shouldBe expectedUser
     }
 
-    "Example of errors" {
+    "Example of cumulating errors" {
         val user = ::User.curry()
             .on(username)
             .on(NameOfAPerson(firstname, lastname))
@@ -77,5 +76,29 @@ class CreateNewUserTests : StringSpec({
 
         errors shouldNotBe null
         errors?.toList()?.joinToString(",") { it.description } shouldBe "xxx should match a valid phone number, but it doesn't,job description should not be null"
+    }
+
+    "Example of build a nullable User"{
+        val user: User? = ::User.curry()
+            .on(username)
+            .on(NameOfAPerson(firstname, lastname))
+            .on(Password.of(passwordValue).toMaybe())
+            .on(::UserContacts.curry() on Email.of(emailValue).toMaybe() on PhoneNumber.of(phoneNumberValue).toMaybe())
+            .on(jobDescription.maybe)
+            .nullable
+
+        user shouldBe expectedUser.get()
+    }
+
+    "Example of build a nullable that returns null"{
+        val user: User? = ::User.curry()
+            .on(username)
+            .on(NameOfAPerson(firstname, lastname))
+            .on(Password.of(passwordValue).toMaybe())
+            .on(::UserContacts.curry() on Email.of(emailValue).toMaybe() on PhoneNumber.of("xxx").toMaybe())
+            .on(jobDescription.maybe)
+            .nullable
+
+        user shouldBe null
     }
 })

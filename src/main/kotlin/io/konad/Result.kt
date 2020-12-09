@@ -1,5 +1,6 @@
 package io.konad
 
+import io.konad.Maybe.Companion.maybe
 import io.konad.exceptions.ResultException
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
@@ -41,6 +42,11 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Ok -> value
         is Errors -> throw ResultException(this)
     }
+
+    fun toMaybe(): ApplicativeFunctorKind<MaybeOf, T> = when(this){
+        is Ok -> value
+        is Errors -> null
+    }.maybe
 
     override fun <R> mapK(fn: (T) -> R): FunctorKind<ResultOf, R> = map(fn)
     override fun <R> flatMapK(fn: (T) -> MonadKind<ResultOf, R>): MonadKind<ResultOf, R> = flatMap { fn(it).result }
