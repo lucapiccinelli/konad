@@ -74,11 +74,11 @@ class ResultTests: StringSpec({
     }
 
     "null to Result: value should convert to Ok"{
-        1.toResult("error") shouldBe Result.Ok(1)
+        1.ifNull("error") shouldBe Result.Ok(1)
     }
 
     "null to Result: value should convert to null"{
-        null.toResult("error") shouldBe Result.Errors("error")
+        null.ifNull("error") shouldBe Result.Errors("error")
     }
 })
 

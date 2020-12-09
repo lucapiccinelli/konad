@@ -3,9 +3,8 @@ package io.konad.usage.examples.model
 import io.konad.Result
 import io.konad.applicative.builders.*
 import io.konad.curry
-import io.konad.ifError
 import io.konad.result
-import io.konad.toResult
+import io.konad.ifNull
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -42,7 +41,7 @@ class CreateNewUserTests : StringSpec({
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue))
             .on(::UserContacts.curry() on Email.of(emailValue) on PhoneNumber.of(phoneNumberValue))
-            .on(jobDescription.toResult("job description should not be null"))
+            .on(jobDescription.ifNull("job description should not be null"))
             .result
 
         user shouldBe expectedUser
@@ -68,7 +67,7 @@ class CreateNewUserTests : StringSpec({
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue))
             .on(::UserContacts.curry() on Email.of(emailValue) on PhoneNumber.of("xxx"))
-            .on(null.toResult("job description should not be null"))
+            .on(null.ifNull("job description should not be null"))
             .result
 
         val errors: Result.Errors? = when(user){

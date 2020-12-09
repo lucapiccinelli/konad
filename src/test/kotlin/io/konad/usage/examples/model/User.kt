@@ -4,7 +4,7 @@ import io.konad.Result
 import io.konad.applicative.builders.on
 import io.konad.curry
 import io.konad.result
-import io.konad.toResult
+import io.konad.ifNull
 
 data class User(
     val username: String,
@@ -27,7 +27,7 @@ data class User(
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(password))
             .on(::UserContacts.curry() on Email.of(email) on PhoneNumber.of(phoneNumber))
-            .on(jobDescription.toResult("job description should not be null"))
+            .on(jobDescription.ifNull("job description should not be null"))
             .result
 
 
