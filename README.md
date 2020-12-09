@@ -51,8 +51,8 @@ In order to compose them and get a Result<User> you have to do
 
     val user: Result<User> = ::User.curry()
         .on("foo.bar")
-        .on(Email.of("foo.bar")) // This email is invalid
-        .on(PhoneNumber.of("xxx")) // This phone number is invalid
+        .on(Email.of("foo.bar")) // This email is invalid -> returns Result.Errors
+        .on(PhoneNumber.of("xxx")) // This phone number is invalid -> returns Result.Errors
         .on("Foo")
         .result
     
