@@ -4,7 +4,9 @@ import io.konad.*
 import io.konad.Maybe.Companion.maybe
 import io.konad.Maybe.Companion.nullable
 import io.konad.applicative.builders.*
+import io.konad.exceptions.ResultException
 import io.konad.usage.examples.model.*
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -101,5 +103,31 @@ class CreateNewUserTests : StringSpec({
             .nullable
 
         user shouldBe null
+    }
+
+    "How to exit the monad with default values"{
+        val xx: Int? = 1
+        val yy: Int? = null
+
+        val total: Int = { x: Int, y: Int -> x + y }.curry()
+            .on(xx.ifNull("xx should not be null"))
+            .on(yy.ifNull("yy should not be null"))
+            .result
+            .ifError(-1)
+
+        total shouldBe -1
+    }
+
+    "How to cheat. (I would suggest not to use it)"{
+        val xx: Int? = 1
+        val yy: Int? = null
+
+        shouldThrow<ResultException>{
+            { x: Int, y: Int -> x + y }.curry()
+                .on(xx.ifNull("xx should not be null"))
+                .on(yy.ifNull("yy should not be null"))
+                .result
+                .get()
+        }
     }
 })
