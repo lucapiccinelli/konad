@@ -1,4 +1,4 @@
-# Konad
+![Konad](assets/konad-logo.png)
 
 [![Build and Test](https://github.com/lucapiccinelli/konad/workflows/build-and-test/badge.svg)](https://github.com/lucapiccinelli/konad/actions)
 
