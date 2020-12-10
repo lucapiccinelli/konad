@@ -70,7 +70,7 @@ In order to compose them and get a Result<User> you have to do
 ## The pure functional style.
 
 Composition happens thanks to concepts named **Functors** and **Applicative Functors**.
-I chose to stay simple and practical, then all the methods that implement composition are called `on`. (See [applicativeBuilders.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt))
+I chose to stay simple and practical, then all the methods that implement composition are called `on` (See [applicativeBuilders.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt)).
 However, for those who love the functional naming, you can choose this other style. (See [applicativeBuildersPureStyle.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuildersPureStyle.kt))
 
 ```kotlin
@@ -141,4 +141,12 @@ val result: Result<Int> = ::useThem.curry()
 
 ```
 
-... WIP ...
+## Extend with your own composable Monads
+
+If you wish to implement your own Monads and let them be composable through `on` **Konad applicative builders**, then you need to implement the interfaces
+that are here: [Higher-kinded types](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)
+
+Actually, to let your type be composable, it is enough to implement the `ApplicativeFunctorKind` interface.
+
+Kotlin doesn't natively supports *Higher-kinded types*. To implement them, Konad is inspired to [how those are implemented in Arrow](https://arrow-kt.io/docs/patterns/glossary/#higher-kinds).
+That is why there is the need of `.result` and `.nullable` extension properties.
