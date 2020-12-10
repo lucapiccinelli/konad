@@ -16,9 +16,13 @@ Here it comes Konad. It has only two classes:
  - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
  - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
  
+These are monads and applicative functors, so they implement the usual `map`, `flatMap` and `ap`. 
 Konad exists **with the only purpose** to let you easily compose these two classes.
 
 ## Usage example
+
+*For an exaustive list of usage examples, please refer to test suite [CreateNewUserTests.kt](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/usage/examples/CreateNewUserTests.kt)
+and to [ResultTests.kt](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ResultTests.kt)*
 
 Let's say you have a `User` class, that has an `Email` and a `PhoneNumber`. Email and PhoneNumber are built so that they can only be constructed using a factory method. It will return a `Result.Errors` type if the value passed is not valid.
 
