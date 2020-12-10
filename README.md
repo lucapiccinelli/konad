@@ -16,7 +16,8 @@ Here it comes Konad. It has only two classes:
  - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
  - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
  
-These are monads and applicative functors, so they implement the usual `map`, `flatMap` and `ap`. 
+These are **monads** and **applicative functors**, so they implement the usual `map`, `flatMap` and `ap` methods. 
+
 Konad exists **with the only purpose** to let you easily compose these two classes.
 
 ## Usage example
@@ -49,7 +50,8 @@ data class PhoneNumber private constructor(val value: String){
 ```
 
 `Email` and `PhoneNumber` constructors are private, so that you can be sure that it can't exist a `User` with invalid contacts. However, the factory methods give you back a `Result<Email>/Result<PhoneNumber>`. 
-In order to compose them and get a Result<User> you have to do
+
+In order to compose them and get a `Result<User>` you have to do the following
 
 ```kotlin
 
@@ -69,7 +71,8 @@ In order to compose them and get a Result<User> you have to do
 
 ## The pure functional style.
 
-Composition happens thanks to concepts named **Functors** and **Applicative Functors**.
+Composition happens thanks to concepts named **functors** and **applicative Functors**.
+
 I chose to stay simple and practical, then all the methods that implement composition are called `on` (See [applicativeBuilders.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt)).
 However, for those who love the functional naming, you can choose this other style. (See [applicativeBuildersPureStyle.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuildersPureStyle.kt))
 
@@ -87,11 +90,12 @@ However, for those who love the functional naming, you can choose this other sty
 <a name="maybe"></a>
 ## Maybe
 
-`Maybe` is needed only to wrap Kotlin *nullables* and bring them to a **higher-kinded type** (see [unaryHigherKindedTypes.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)). In this way `on` can be used to compose nullables. 
+`Maybe` is needed only to wrap Kotlin *nullables* and bring them to a **higher-kinded type** (see [unaryHigherKindedTypes.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)). 
+In this way `on`, can be used to compose nullables. 
 
-Its constructor is private because **you should avoid using it** in order
-to express *optionality*. Kotlin nullability is perfect for that purpose.
+Its constructor is private because **you should avoid using it** in order to express *optionality*. Kotlin nullability is perfect for that purpose.
 
+### How to compose nullables
 If ever you tried to compose *nullables* in Kotlin, then probably you ended up having something like the following
 
 ```kotlin
@@ -141,12 +145,12 @@ val result: Result<Int> = ::useThem.curry()
 
 ```
 
-## Extend with your own composable Monads
+## Extend with your own composable monads
 
-If you wish to implement your own Monads and let them be composable through `on` **Konad applicative builders**, then you need to implement the interfaces
+If you wish to implement your own monads and let them be composable through the `on` **Konad applicative builders**, then you need to implement the interfaces
 that are here: [Higher-kinded types](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)
 
 Actually, to let your type be composable, it is enough to implement the `ApplicativeFunctorKind` interface.
 
-Kotlin doesn't natively supports *Higher-kinded types*. To implement them, Konad is inspired to [how those are implemented in Arrow](https://arrow-kt.io/docs/patterns/glossary/#higher-kinds).
+Kotlin doesn't natively supports *Higher-kinded types*. To implement them, Konad is inspired on [how those are implemented in Arrow](https://arrow-kt.io/docs/patterns/glossary/#higher-kinds).
 That is why there is the need of `.result` and `.nullable` extension properties.
