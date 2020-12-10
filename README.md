@@ -1,4 +1,4 @@
-<img src="assets/konad-logo.png" alt="Konad" width="700"/>
+<img src="assets/konad-logo.png" alt="Konad" width="600"/>
 
 ---
 
