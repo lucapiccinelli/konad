@@ -44,3 +44,5 @@ target/test-classes
 target
 target/classes target/KtBowling-1.0-SNAPSHOT.jar target/maven-archiver target/maven-status target/surefire-reports target/test-classes
 .idea
+.keys
+settings.xml
