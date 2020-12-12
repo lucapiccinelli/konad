@@ -24,9 +24,10 @@ Konad exists **with the only purpose** to let you easily compose these two class
 
 ## Getting started
 
-Add the maven dependency to your pom
+Add the dependency
 
 #### Maven
+add in pom.xml
 ```xml
 <dependency>
     <groupId>io.github.lucapiccinelli</groupId>
@@ -36,6 +37,7 @@ Add the maven dependency to your pom
 ```
 
 #### Gradle
+add in build.gradle
 ```groovy
 dependencies {
     implementation "io.github.lucapiccinelli:konad:1.0.0"
