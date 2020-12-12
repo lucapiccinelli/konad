@@ -22,6 +22,26 @@ These are **monads** and **applicative functors**, so they implement the usual `
 
 Konad exists **with the only purpose** to let you easily compose these two classes.
 
+## Getting started
+
+Add the maven dependency to your pom
+
+#### Maven
+```xml
+<dependency>
+    <groupId>io.github.lucapiccinelli</groupId>
+    <artifactId>konad</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+#### Gradle
+```groovy
+dependencies {
+    implementation "io.github.lucapiccinelli:konad:1.0.0"
+}
+```
+
 ## Usage example
 
 *For an exaustive list of usage examples, please refer to test suite [CreateNewUserTests.kt](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/usage/examples/CreateNewUserTests.kt)
