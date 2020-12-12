@@ -41,7 +41,9 @@ jobs:
           ${{ runner.os }}-maven-
       
     - name: Publish package to maven central repository
-      run: mvn -B clean deploy --file pom.xml -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+      run:
+        export GPG_TTY=$(tty)
+        mvn -B clean deploy --file pom.xml -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
