@@ -3,12 +3,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.konad</groupId>
+    <groupId>io.github.lucapiccinelli</groupId>
     <artifactId>konad</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>io.konad konad</name>
+    <name>io.github.lucapiccinelli konad</name>
     <description>Simple Kotlin monads for every day error handling</description>
     <url>https://github.com/lucapiccinelli/konad</url>
 
@@ -25,7 +25,7 @@
             <name>Luca Piccinelli</name>
             <email>luca.picci@gmail.com</email>
             <organization>Luca Piccinelli</organization>
-            <organizationUrl>https://github.com/lucapiccinelli</organizationUrl>
+            <organizationUrl>https://medium.com/@luca_picci</organizationUrl>
         </developer>
     </developers>
 
@@ -52,6 +52,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>4.12</junit.version>
         <kotest.version>4.3.0</kotest.version>
+        <dokka.version>1.4.20</dokka.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,14 @@
         </dependency>
         <!-- /kotest -->
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -188,14 +197,16 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>dokka</goal>
+                            <goal>javadoc</goal>
+                            <goal>javadocJar</goal>
                         </goals>
                     </execution>
                 </executions>
