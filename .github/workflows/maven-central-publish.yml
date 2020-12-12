@@ -12,9 +12,6 @@ on:
         description: 'Log level'
         required: true
         default: 'warning'
-      tags:
-        required: false
-        description: 'test publish on maven central'
 
 jobs:
   build:
@@ -34,6 +31,14 @@ jobs:
     - id: install-secret-key
       name: Install gpg secret key
       run: cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | base64 --decode | gpg --batch --import
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
       
     - name: Publish package to maven central repository
       run: mvn -B clean deploy --file pom.xml -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
