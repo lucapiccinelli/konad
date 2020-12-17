@@ -179,7 +179,7 @@ val r: Result<Collection<Int>> = listOf(Result.Ok(1), Result.Ok(2)).flatten()
 
 ```
 
-Errors gets cumulated as usual
+Errors get cumulated as usual
 
 ```kotlin
  val r: Result<Collection<Int>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))

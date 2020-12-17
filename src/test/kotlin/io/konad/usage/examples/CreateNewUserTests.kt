@@ -118,7 +118,7 @@ class CreateNewUserTests : StringSpec({
         total shouldBe -1
     }
 
-    "How to cheat. (I would suggest not to use it)"{
+    "How to cheat. (I would suggest not using it)"{
         val xx: Int? = 1
         val yy: Int? = null
 
