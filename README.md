@@ -182,10 +182,13 @@ val r: Result<Collection<Int>> = listOf(Result.Ok(1), Result.Ok(2)).flatten()
 Errors gets cumulated as usual
 
 ```kotlin
-val r: Result<Collection<Int>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
+ val r: Result<Collection<Int>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
     .flatten()
 
-println(r.description) // will print error1 - error2
+when(r){
+    is Result.Ok -> r.value.toString()
+    is Result.Errors -> r.description
+}.run(::println) // will print error1 - error2
 ```
 
 Obviously it works also on nullables: `Collection<T?> -> Collection<T>?`
