@@ -1,6 +1,8 @@
 package io.konad
 
 import io.konad.Maybe.Companion.maybe
+import io.konad.applicative.builders.ap
+import io.konad.applicative.builders.map
 import io.konad.exceptions.ResultException
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
@@ -9,9 +11,12 @@ import io.konad.hkt.MonadKind
 
 sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<ResultOf, T>{
 
-    data class Ok<T>(val value: T): Result<T>()
+    data class Ok<out T>(val value: T): Result<T>()
     data class Errors(val error: Error, val prev: Errors? = null): Result<Nothing>(){
+
         constructor(description: String) : this(Error(description))
+
+        val description = toList().joinToString(" - " ) { it.description }
 
         fun toList(): Collection<Error> = (prev
             ?.run { toList() }
@@ -20,7 +25,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
     }
 
     companion object{
-        fun <T> pure(value: T) = Ok(value)
+        fun <T> pure(value: T): Result<T> = Ok(value)
     }
 
     inline fun <R> map(fn: (T) -> R): Result<R> = flatMap { Ok(fn(it)) }

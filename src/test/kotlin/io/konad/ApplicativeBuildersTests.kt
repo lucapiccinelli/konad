@@ -1,5 +1,7 @@
 package io.konad
 
+import io.konad.Maybe.Companion.maybe
+import io.konad.Maybe.Companion.nullable
 import io.kotest.core.spec.style.StringSpec
 import io.konad.applicative.builders.*
 import io.konad.exceptions.ResultException
@@ -49,6 +51,49 @@ class ApplicativeBuildersTests : StringSpec({
 
         val ex = shouldThrow<ResultException> { person.get() }
         ex.errors.toList() shouldBe listOf(error1.error, error3.error)
+    }
+
+    "When i have a collection of results I want to flatten it as a result of a collection" {
+
+        listOf(Result.Ok(1), Result.Ok(2))
+            .flatten(Result.Companion::pure)
+            .result shouldBe Result.Ok(listOf(1, 2))
+
+    }
+
+    "When i have a collection of results with more than one error I want to have the complete list of errors" {
+
+        val ex = shouldThrow<ResultException> {
+            listOf(Result.Errors("x"), Result.Ok(1), Result.Errors("y"))
+                .flatten(Result.Companion::pure)
+                .result
+                .get()
+        }
+
+        ex.errors.description shouldBe "x - y"
+    }
+
+    "GIVEN a collection of nullables WHEN any is null THEN the flattening is null as well" {
+        val listOfNullables: Collection<String?> = setOf("", null, "")
+
+        val flattened: Collection<String>? = listOfNullables
+            .map { it.maybe }
+            .flatten(Maybe.Companion::pure)
+            .nullable
+
+        flattened shouldBe null
+    }
+
+    "GIVEN a collection of nullables WHEN no element is null THEN the flattening should success" {
+        val listOfNullables: Set<String?> = setOf("a", "b", "c")
+
+        val flattened: Collection<String>? = listOfNullables
+            .map { it.maybe }
+            .flatten(Maybe.Companion::pure)
+            .nullable
+
+        val expectedSet: Set<String>? = setOf("a", "b", "c")
+        flattened shouldBe expectedSet
     }
 
 })
