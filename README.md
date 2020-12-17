@@ -194,7 +194,7 @@ println(r.description) // will print error1 - error2
 Obviously it works also on nullables: `Collection<T?> -> Collection<T>?`
 
 ```kotlin
-setOf("a", null, "c")
+val flattened = setOf("a", null, "c")
     .map { it.maybe }
     .flatten(Maybe.Companion::pure)
     .nullable
