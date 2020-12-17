@@ -55,9 +55,7 @@ class ApplicativeBuildersTests : StringSpec({
 
     "When i have a collection of results I want to flatten it as a result of a collection" {
 
-        listOf(Result.Ok(1), Result.Ok(2))
-            .flatten(Result.Companion::pure)
-            .result shouldBe Result.Ok(listOf(1, 2))
+        listOf(Result.Ok(1), Result.Ok(2)).flatten() shouldBe Result.Ok(listOf(1, 2))
 
     }
 
@@ -65,8 +63,7 @@ class ApplicativeBuildersTests : StringSpec({
 
         val ex = shouldThrow<ResultException> {
             listOf(Result.Errors("x"), Result.Ok(1), Result.Errors("y"))
-                .flatten(Result.Companion::pure)
-                .result
+                .flatten()
                 .get()
         }
 
@@ -76,10 +73,7 @@ class ApplicativeBuildersTests : StringSpec({
     "GIVEN a collection of nullables WHEN any is null THEN the flattening is null as well" {
         val listOfNullables: Collection<String?> = setOf("", null, "")
 
-        val flattened: Collection<String>? = listOfNullables
-            .map { it.maybe }
-            .flatten(Maybe.Companion::pure)
-            .nullable
+        val flattened: Collection<String>? = listOfNullables.flatten()
 
         flattened shouldBe null
     }
@@ -87,10 +81,7 @@ class ApplicativeBuildersTests : StringSpec({
     "GIVEN a collection of nullables WHEN no element is null THEN the flattening should success" {
         val listOfNullables: Set<String?> = setOf("a", "b", "c")
 
-        val flattened: Collection<String>? = listOfNullables
-            .map { it.maybe }
-            .flatten(Maybe.Companion::pure)
-            .nullable
+        val flattened: Collection<String>? = listOfNullables.flatten()
 
         val expectedSet: Set<String>? = setOf("a", "b", "c")
         flattened shouldBe expectedSet

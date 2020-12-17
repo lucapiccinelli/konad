@@ -1,7 +1,9 @@
 package io.konad
 
 import io.konad.Maybe.Companion.maybe
+import io.konad.Maybe.Companion.nullable
 import io.konad.applicative.builders.ap
+import io.konad.applicative.builders.flatten
 import io.konad.applicative.builders.map
 import io.konad.exceptions.ResultException
 import io.konad.hkt.ApplicativeFunctorKind
@@ -72,3 +74,7 @@ fun <T> T?.ifNull(errorMessage: String) = this
 open class ResultOf
 val <T> Kind<ResultOf, T>.result
     get() = this as Result<T>
+
+fun <T> Collection<Result<T>>.flatten(): Result<Collection<T>> =
+    flatten(Result.Companion::pure)
+    .result

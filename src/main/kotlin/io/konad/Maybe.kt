@@ -1,5 +1,8 @@
 package io.konad
 
+import io.konad.Maybe.Companion.maybe
+import io.konad.Maybe.Companion.nullable
+import io.konad.applicative.builders.flatten
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
 import io.konad.hkt.Kind
@@ -32,3 +35,7 @@ class Maybe<out T> private constructor(private val value: T?):
     override fun <R> mapK(fn: (T) -> R): FunctorKind<MaybeOf, R> = map(fn)
     override fun <R> apK(liftedFn: FunctorKind<MaybeOf, (T) -> R>): ApplicativeFunctorKind<MaybeOf, R> = ap(liftedFn.downcast())
 }
+
+fun <T> Collection<T?>.flatten(): Collection<T>? = map { it.maybe }
+    .flatten(Maybe.Companion::pure)
+    .nullable
