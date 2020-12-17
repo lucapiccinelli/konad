@@ -169,6 +169,39 @@ val result: Result<Int> = ::useThem.curry()
 
 ```
 
+## Flatten
+
+What if you have a `List<Result<T>>` and you want a `Result<List<T>>`? Then use `flatten` extension method.
+
+```kotlin
+
+val r: Result<List<Int>> = listOf(Result.Ok(1), Result.Ok(2))
+    .flatten(Result.Companion::pure)
+    .result
+
+```
+
+Errors gets cumulated as usual
+
+```kotlin
+val r: Result<List<String>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
+    .flatten(Result.Companion::pure)
+    .result
+
+println(r.description) // will print error1 - error2
+```
+
+Obviously it works also on nullables: `Collection<T?> -> Collection<T>?`
+
+```kotlin
+setOf("a", null, "c")
+    .map { it.maybe }
+    .flatten(Maybe.Companion::pure)
+    .nullable
+
+flattened shouldBe null
+```
+
 ## Extend with your own composable monads
 
 If you wish to implement your own monads and let them be composable through the `on` **Konad applicative builders**, then you need to implement the interfaces
