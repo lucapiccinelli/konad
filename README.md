@@ -175,9 +175,7 @@ What if you have a `List<Result<T>>` and you want a `Result<List<T>>`? Then use 
 
 ```kotlin
 
-val r: Result<Collection<Int>> = listOf(Result.Ok(1), Result.Ok(2))
-    .flatten(Result.Companion::pure)
-    .result
+val r: Result<Collection<Int>> = listOf(Result.Ok(1), Result.Ok(2)).flatten()
 
 ```
 
@@ -185,8 +183,7 @@ Errors gets cumulated as usual
 
 ```kotlin
 val r: Result<Collection<Int>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
-    .flatten(Result.Companion::pure)
-    .result
+    .flatten()
 
 println(r.description) // will print error1 - error2
 ```
@@ -194,10 +191,7 @@ println(r.description) // will print error1 - error2
 Obviously it works also on nullables: `Collection<T?> -> Collection<T>?`
 
 ```kotlin
-val flattened = setOf("a", null, "c")
-    .map { it.maybe }
-    .flatten(Maybe.Companion::pure)
-    .nullable
+val flattened = setOf("a", null, "c").flatten()
 
 flattened shouldBe null
 ```
