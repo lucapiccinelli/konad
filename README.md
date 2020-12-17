@@ -32,7 +32,7 @@ add in pom.xml
 <dependency>
     <groupId>io.github.lucapiccinelli</groupId>
     <artifactId>konad</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
