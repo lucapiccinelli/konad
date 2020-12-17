@@ -175,7 +175,7 @@ What if you have a `List<Result<T>>` and you want a `Result<List<T>>`? Then use 
 
 ```kotlin
 
-val r: Result<List<Int>> = listOf(Result.Ok(1), Result.Ok(2))
+val r: Result<Collection<Int>> = listOf(Result.Ok(1), Result.Ok(2))
     .flatten(Result.Companion::pure)
     .result
 
@@ -184,7 +184,7 @@ val r: Result<List<Int>> = listOf(Result.Ok(1), Result.Ok(2))
 Errors gets cumulated as usual
 
 ```kotlin
-val r: Result<List<String>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
+val r: Result<Collection<String>> = listOf(Result.Errors("error1"), Result.Ok(1), Result.Errors("error2"))
     .flatten(Result.Companion::pure)
     .result
 
