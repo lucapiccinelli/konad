@@ -80,6 +80,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Coroutines -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        <!-- /Coroutines -->
+
+
         <!-- kotest -->
         <dependency>
             <groupId>io.kotest</groupId>
