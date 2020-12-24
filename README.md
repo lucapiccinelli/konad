@@ -57,17 +57,17 @@ data class User(val username: String, val email: Email, val phoneNumber: PhoneNu
 
 data class Email private constructor (val value: String) {
     companion object{
-        fun of(emailValue: String) = if (Regex(EMAIL_REGEX).matches(emailValue))
-            Result.Ok(Email(emailValue))
-            else Result.Errors("$emailValue doesn't match an email format")
+        fun of(emailValue: String): Result<Email> = if (Regex(EMAIL_REGEX).matches(emailValue))
+            Email(emailValue).ok()
+            else "$emailValue doesn't match an email format".error()
     }
 }
 
 data class PhoneNumber private constructor(val value: String){
     companion object {
-        fun of(phoneNumberValue: String): Result<PhoneNumber?> = if(Regex(PHONENUMBER_REGEX).matches(phoneNumberValue))
-            Result.Ok(PhoneNumber(phoneNumberValue))
-            else Result.Errors("$phoneNumberValue should match a valid phone number, but it doesn't")
+        fun of(phoneNumberValue: String): Result<PhoneNumber> = if(Regex(PHONENUMBER_REGEX).matches(phoneNumberValue))
+            PhoneNumber(phoneNumberValue).ok()
+            else "$phoneNumberValue should match a valid phone number, but it doesn't".error()
     }
 }
 
