@@ -78,3 +78,6 @@ val <T> Kind<ResultOf, T>.result
 fun <T> Collection<Result<T>>.flatten(): Result<Collection<T>> =
     flatten(Result.Companion::pure)
     .result
+
+fun <T> T.ok(): Result.Ok<T> = Result.Ok(this)
+fun String.error(): Result.Errors = Result.Errors(this)

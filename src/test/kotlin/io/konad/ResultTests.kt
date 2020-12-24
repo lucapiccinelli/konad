@@ -80,6 +80,14 @@ class ResultTests: StringSpec({
     "null to Result: value should convert to null"{
         null.ifNull("error") shouldBe Result.Errors("error")
     }
+
+    "Can use ok extension method to create a new Result.Ok" {
+        1.ok() shouldBe Result.Ok(1)
+    }
+
+    "Can use error extension method to create a new Result.Errors" {
+        "booom".error() shouldBe Result.Errors("booom")
+    }
 })
 
 
