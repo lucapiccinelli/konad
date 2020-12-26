@@ -3,7 +3,6 @@ package io.konad
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.checkAll
-import io.kotest.property.forAll
 
 class LawsTests: StringSpec({
 
@@ -45,5 +44,16 @@ class LawsTests: StringSpec({
         val g = { y: Double -> "error".error() }
         checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
     }
+
+    "Result respects the first applicative law (identity)"{
+        val id = { x: Double -> x }
+        checkAll<Double> { v -> Result.pure(v).ap(Result.pure(id)) shouldBe Result.pure(v) }
+    }
+
+    "Result respects the second applicative law (Homomorphism)"{
+        val f = { x: Double -> x + 6 }
+        checkAll<Double> { v -> Result.pure(v).ap(Result.pure(f)) shouldBe Result.pure(f(v)) }
+    }
+
 
 })
