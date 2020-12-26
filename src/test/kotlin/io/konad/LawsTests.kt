@@ -55,5 +55,12 @@ class LawsTests: StringSpec({
         checkAll<Double> { v -> Result.pure(v).ap(Result.pure(f)) shouldBe Result.pure(f(v)) }
     }
 
+    "Result respects the third applicative law (Interchange)"{
+        val f = { x: Double -> x + 6 }
+        val u = Result.pure(f)
+
+        checkAll<Double> { v -> Result.pure(v).ap(u) shouldBe u.ap(Result.pure { f2: (Double) -> Double -> f2(v) }) }
+    }
+
 
 })
