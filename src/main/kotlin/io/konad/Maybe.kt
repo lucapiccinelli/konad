@@ -17,10 +17,10 @@ data class Maybe<out T> private constructor(private val value: T?):
     companion object{
         private fun <T> Kind<MaybeOf, T>.downcast() = this as Maybe<T>
 
-        fun <T> pure(value: T) = Maybe(value)
-        val <T> T?.maybe: ApplicativeFunctorKind<MaybeOf, T>
+        fun <T: Any> pure(value: T) = Maybe(value)
+        val <T: Any> T?.maybe: Maybe<T>
             get() = Maybe(this)
-        val <T> Kind<MaybeOf, T>.nullable: T?
+        val <T: Any> Kind<MaybeOf, T>.nullable: T?
             get() = downcast().value
     }
 
