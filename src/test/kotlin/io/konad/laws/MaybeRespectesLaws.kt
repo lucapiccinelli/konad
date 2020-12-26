@@ -67,8 +67,6 @@ class MaybeRespectesLaws: StringSpec({
         checkAll<Double> { v -> Maybe.pure(v).apK(u) shouldBe u.apK(Maybe.pure { f2: (Double) -> Double -> f2(v) }) }
     }
 
-
-
     "Maybe respects the fourth applicative law (Composition)"{
         val compose = { f: (Double) -> String -> { g: (Int) -> Double -> { a: Int -> f(g(a)) } } }
         val g = { x: Double -> x.toString() }

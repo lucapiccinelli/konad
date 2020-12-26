@@ -65,8 +65,6 @@ class ResultRespectesLaws: StringSpec({
         checkAll<Double> { v -> Result.pure(v).ap(u) shouldBe u.ap(Result.pure { f2: (Double) -> Double -> f2(v) }) }
     }
 
-
-
     "Result respects the fourth applicative law (Composition)"{
         val compose = { f: (Double) -> String -> { g: (Int) -> Double -> { a: Int -> f(g(a)) } } }
         val g = { x: Double -> x.toString() }
