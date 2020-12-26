@@ -10,7 +10,7 @@ import io.konad.hkt.MonadKind
 
 typealias MaybeOf = Any?
 
-class Maybe<out T> private constructor(private val value: T?):
+data class Maybe<out T> private constructor(private val value: T?):
     MonadKind<MaybeOf, T>,
     ApplicativeFunctorKind<MaybeOf, T> {
 
