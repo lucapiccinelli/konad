@@ -7,16 +7,43 @@ import io.kotest.property.forAll
 
 class LawsTests: StringSpec({
 
-    "Result respects first functor law (identity)"{
+    "Result respects the first functor law (identity)"{
         val id = { x: String -> x }
         checkAll<String> { v -> Result.pure(v).map(id) shouldBe Result.pure(v) }
     }
 
-
-    "Result respects first functor law (composition)"{
+    "Result respects the second functor law (composition)"{
         val f = { x: Double -> x + 6 }
         val g = { y: Double -> y * y }
         checkAll<Double> { v -> Result.pure(v).map(f).map(g) shouldBe Result.pure(g(f(v))) }
+    }
+
+    "Result respects the first monad law (left identity)"{
+        val f = { x: Double -> (x + 6).ok() }
+        checkAll<Double> { v -> Result.pure(v).flatMap(f) shouldBe f(v) }
+    }
+
+    "Result respects the second monad law (right identity)"{
+        val f = { x: Double -> Result.pure(x) }
+        checkAll<Double> { v -> Result.pure(v).flatMap(f) shouldBe Result.pure(v) }
+    }
+
+    "Result respects the third monad law (associativity)"{
+        val f = { x: Double -> (x + 6).ok() }
+        val g = { y: Double -> (y * y).ok() }
+        checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
+    }
+
+    "Result respects the third monad law (associativity) on error case 1"{
+        val f = { x: Double -> "error".error() }
+        val g = { y: Double -> (y * y).ok() }
+        checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
+    }
+
+    "Result respects the third monad law (associativity) on error case 2"{
+        val f = { x: Double -> (x + 6).ok() }
+        val g = { y: Double -> "error".error() }
+        checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
     }
 
 })
