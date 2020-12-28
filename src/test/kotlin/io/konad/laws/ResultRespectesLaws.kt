@@ -37,14 +37,14 @@ class ResultRespectesLaws: StringSpec({
     }
 
     "Result respects the third monad law (associativity) on error case 1"{
-        val f = { x: Double -> "error".error() }
+        val f = { _: Double -> "error".error() }
         val g = { y: Double -> (y * y).ok() }
         checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
     }
 
     "Result respects the third monad law (associativity) on error case 2"{
         val f = { x: Double -> (x + 6).ok() }
-        val g = { y: Double -> "error".error() }
+        val g = { _: Double -> "error".error() }
         checkAll<Double> { v -> Result.pure(v).flatMap(f).flatMap(g) shouldBe Result.pure(v).flatMap { x -> f(x).flatMap(g) } }
     }
 

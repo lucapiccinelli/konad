@@ -2,9 +2,6 @@ package io.konad.laws
 
 import io.konad.Maybe
 import io.konad.Maybe.Companion.maybe
-import io.konad.Result
-import io.konad.error
-import io.konad.ok
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.checkAll
@@ -39,14 +36,14 @@ class MaybeRespectesLaws: StringSpec({
     }
 
     "Maybe respects the third monad law (associativity) on null on f"{
-        val f = { x: Double -> null.maybe }
+        val f = { _: Double -> null.maybe }
         val g = { y: Double -> (y * y).maybe }
         checkAll<Double> { v -> Maybe.pure(v).flatMapK(f).flatMapK(g) shouldBe Maybe.pure(v).flatMapK { x -> f(x).flatMapK(g) } }
     }
 
     "Maybe respects the third monad law (associativity) on null on g"{
         val f = { x: Double -> (x + 6).maybe }
-        val g = { y: Double -> null.maybe }
+        val g = { _: Double -> null.maybe }
         checkAll<Double> { v -> Maybe.pure(v).flatMapK(f).flatMapK(g) shouldBe Maybe.pure(v).flatMapK { x -> f(x).flatMapK(g) } }
     }
 
