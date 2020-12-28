@@ -88,6 +88,14 @@ class ResultTests: StringSpec({
     "Can use error extension method to create a new Result.Errors" {
         "booom".error() shouldBe Result.Errors("booom")
     }
+
+    "Result.Ok folds first" {
+        1.ok().fold({ it + 1 }, { it.toList().size }) shouldBe 2
+    }
+
+    "Result.Error folds as second" {
+        "booom".error().fold({ "ok" }, { it.description }) shouldBe "booom"
+    }
 })
 
 

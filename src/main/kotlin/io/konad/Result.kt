@@ -45,6 +45,12 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         }
     }
 
+    inline fun <R> fold(onOk: (T) -> R, onErrors: (Errors) -> R): R =
+        when (this) {
+            is Ok -> onOk(this.value)
+            is Errors -> onErrors(this)
+        }
+
     fun get(): T = when(this){
         is Ok -> value
         is Errors -> throw ResultException(this)
