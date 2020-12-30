@@ -93,8 +93,14 @@ class ResultTests: StringSpec({
         1.ok().fold({ it + 1 }, { it.toList().size }) shouldBe 2
     }
 
-    "Result.Error folds as second" {
+    "Result.Errors folds as second" {
         "booom".error().fold({ "ok" }, { it.description }) shouldBe "booom"
+    }
+
+    "can use description() with a separator to obtain the error descriptions of multiple Result.Errors" {
+        val errors = Result.Errors(Error("z"), Result.Errors(Error("y"), Result.Errors(Error("x"))))
+
+        errors.description(errorDescriptionsSeparator = ",") shouldBe "x,y,z"
     }
 })
 
