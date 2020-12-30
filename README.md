@@ -89,7 +89,7 @@ In order to compose them and get a `Result<User>` you have to do the following
     
     when(user){
         is Result.Ok -> user.toString()
-        is Result.Errors -> user.toList().joinToString(" - ") { it.error.description }  
+        is Result.Errors -> user.toList().joinToString(" - ") { it.error.description(" - ") }  
     }.run { println(this) } // This is going to print "foo.bar doesn't match an email format - xxx should match a valid phone number, but it doesn't
 
 ```
