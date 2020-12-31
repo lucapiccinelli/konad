@@ -5,7 +5,7 @@
 [![Build and Test](https://github.com/lucapiccinelli/konad/workflows/build-and-test/badge.svg)](https://github.com/lucapiccinelli/konad/actions)
 [![Maven Central](http://img.shields.io/maven-central/v/io.github.lucapiccinelli/konad.svg)](https://search.maven.org/search?q=a:konad)
 
-Simple Kotlin monads for every day error handling.
+Simple Kotlin monads for everyday error handling.
 
 ## Why another functional library for Kotlin?
 
