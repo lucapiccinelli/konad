@@ -66,6 +66,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
     }.maybe
 
     override fun <R> mapK(fn: (T) -> R): FunctorKind<ResultOf, R> = map(fn)
+    override fun <R> apMapK(fn: (T) -> R): ApplicativeFunctorKind<ResultOf, R> = map(fn)
     override fun <R> flatMapK(fn: (T) -> MonadKind<ResultOf, R>): MonadKind<ResultOf, R> = flatMap { fn(it).result }
     override fun <R> apK(liftedFn: FunctorKind<ResultOf, (T) -> R>): ApplicativeFunctorKind<ResultOf, R> = ap(liftedFn.result)
 }
