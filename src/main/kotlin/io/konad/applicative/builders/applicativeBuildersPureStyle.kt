@@ -10,11 +10,11 @@ infix fun <T, R> ((T) -> R).apply(t: T): R = on(t)
 
 
 inline fun <F, T> Collection<ApplicativeFunctorKind<F, T>>.flatten(pureLift: (Collection<T>) -> ApplicativeFunctorKind<F, Collection<T>>): ApplicativeFunctorKind<F, Collection<T>> =
-    fold(pureLift(emptyList())) { acc, f ->
-        { c: Collection<T> -> { t: T -> c + t } } map acc ap f
+    { c: Collection<T> -> { t: T -> c + t } }.let { accumulate ->
+        fold(pureLift(emptyList())) { acc, f -> accumulate map acc ap f }
     }
 
 inline fun <F, T> Sequence<ApplicativeFunctorKind<F, T>>.flatten(pureLift: (Sequence<T>) -> ApplicativeFunctorKind<F, Sequence<T>>): ApplicativeFunctorKind<F, Sequence<T>> =
-    fold(pureLift(emptySequence())) { acc, f ->
-        { c: Sequence<T> -> { t: T -> c + t } } map acc ap f
+    { c: Sequence<T> -> { t: T -> c + t } }.let { accumulate ->
+        fold(pureLift(emptySequence())) { acc, f -> accumulate map acc ap f }
     }
