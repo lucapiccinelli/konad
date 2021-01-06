@@ -37,6 +37,7 @@ data class Maybe<out T> private constructor(private val value: T?):
     override fun <R> apK(liftedFn: FunctorKind<MaybeOf, (T) -> R>): ApplicativeFunctorKind<MaybeOf, R> = ap(liftedFn.downcast())
 }
 
-fun <T> Collection<T?>.flatten(): Collection<T>? = map { it.maybe }
+fun <T> Collection<T?>.flatten(): Collection<T>? = asSequence().map { it.maybe }
     .flatten(Maybe.Companion::pure)
     .nullable
+    ?.toList()

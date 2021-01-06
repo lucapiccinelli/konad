@@ -13,3 +13,8 @@ inline fun <F, T> Collection<ApplicativeFunctorKind<F, T>>.flatten(pureLift: (Co
     fold(pureLift(emptyList())) { acc, f ->
         { c: Collection<T> -> { t: T -> c + t } } map acc ap f
     }
+
+inline fun <F, T> Sequence<ApplicativeFunctorKind<F, T>>.flatten(pureLift: (Sequence<T>) -> ApplicativeFunctorKind<F, Sequence<T>>): ApplicativeFunctorKind<F, Sequence<T>> =
+    fold(pureLift(emptySequence())) { acc, f ->
+        { c: Sequence<T> -> { t: T -> c + t } } map acc ap f
+    }
