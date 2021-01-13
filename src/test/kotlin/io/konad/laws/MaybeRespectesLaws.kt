@@ -6,7 +6,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.checkAll
 
-class MaybeRespectesLaws: StringSpec({
+class MaybeRespectsLaws: StringSpec({
 
     "Maybe respects the first functor law (identity)"{
         val id = { x: String -> x }

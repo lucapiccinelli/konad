@@ -7,7 +7,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.checkAll
 
-class ResultRespectesLaws: StringSpec({
+class ResultRespectsLaws: StringSpec({
 
     "Result respects the first functor law (identity)"{
         val id = { x: String -> x }

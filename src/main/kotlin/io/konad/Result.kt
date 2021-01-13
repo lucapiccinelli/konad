@@ -1,15 +1,8 @@
 package io.konad
 
 import io.konad.Maybe.Companion.maybe
-import io.konad.Maybe.Companion.nullable
-import io.konad.applicative.builders.ap
-import io.konad.applicative.builders.flatten
-import io.konad.applicative.builders.map
 import io.konad.exceptions.ResultException
-import io.konad.hkt.ApplicativeFunctorKind
-import io.konad.hkt.FunctorKind
-import io.konad.hkt.Kind
-import io.konad.hkt.MonadKind
+import io.konad.hkt.*
 
 sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<ResultOf, T>{
 
