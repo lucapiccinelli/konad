@@ -53,6 +53,21 @@ class ApplicativeBuildersTests : StringSpec({
         ex.errors.toList() shouldBe listOf(error1.error, error3.error)
     }
 
+    "nested errors with a title should be formatted as expected" {
+        val error1 = Result.Errors("banana").errorTitle("fruit1")
+        val value = Result.Ok(1)
+        val error3 = Result.Errors("pear").errorTitle("fruit2")
+
+        val person: Result<Person> = ::Person.curry()
+            .on(error1)
+            .on(value)
+            .on(error3)
+            .result
+            .errorTitle("Person")
+
+        person.ifError { it.description(", ") } shouldBe "Person: fruit1: banana, Person: fruit2: pear"
+    }
+
     "When i have a collection of results I want to flatten it as a result of a collection" {
 
         listOf(Result.Ok(1), Result.Ok(2)).flatten() shouldBe Result.Ok(listOf(1, 2))

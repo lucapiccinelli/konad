@@ -107,7 +107,7 @@ class ResultTests: StringSpec({
         val errors: Result<Any> = Result.Errors(Error("y"), Result.Errors(Error("x")))
         val newError = errors.errorTitle("banana")
 
-        (newError as Result.Errors).description(errorDescriptionsSeparator = ",") shouldBe "banana: x,y"
+        (newError as Result.Errors).description(errorDescriptionsSeparator = ",") shouldBe "banana: x,banana: y"
     }
 })
 
