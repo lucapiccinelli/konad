@@ -21,8 +21,8 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         val description = description(" - ")
 
         fun description(errorDescriptionsSeparator: String = ",") = toList()
-            .joinToString(errorDescriptionsSeparator)
-            { it.description }
+            .joinToString(errorDescriptionsSeparator) { it.description }
+            .let { message -> error.title?.run { "$this: $message" } ?: message }
 
         fun toList(): Collection<Error> = (prev
             ?.run { toList() }
@@ -64,6 +64,11 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Ok -> value
         is Errors -> null
     }.maybe
+
+    fun errorTitle(title: String): Result<T> = when(this) {
+        is Ok -> this
+        is Errors -> copy(error = error.copy(title = title))
+    }
 
     override fun <R> mapK(fn: (T) -> R): FunctorKind<ResultOf, R> = map(fn)
     override fun <R> apMapK(fn: (T) -> R): ApplicativeFunctorKind<ResultOf, R> = map(fn)

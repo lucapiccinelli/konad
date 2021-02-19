@@ -102,6 +102,13 @@ class ResultTests: StringSpec({
 
         errors.description(errorDescriptionsSeparator = ",") shouldBe "x,y,z"
     }
+
+    "can enrich the error description prefixing it with a title" {
+        val errors: Result<Any> = Result.Errors(Error("y"), Result.Errors(Error("x")))
+        val newError = errors.errorTitle("banana")
+
+        (newError as Result.Errors).description(errorDescriptionsSeparator = ",") shouldBe "banana: x,y"
+    }
 })
 
 
