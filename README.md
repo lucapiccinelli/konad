@@ -96,7 +96,7 @@ In order to compose them and get a `Result<User>` you have to do the following
     
     userResult
        .map{ user -> user.toString() }
-       .ifError { errors -> description(errorDescriptionsSeparator = " - ") }
+       .ifError { errors -> errors.description(errorDescriptionsSeparator = " - ") }
        .run(::println)
 
 ```
