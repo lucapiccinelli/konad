@@ -80,17 +80,24 @@ In order to compose them and get a `Result<User>` you have to do the following
 
 ```kotlin
 
-    val user: Result<User> = ::User.curry()
+    val userResult: Result<User> = ::User.curry()
         .on("foo.bar")
         .on(Email.of("foo.bar")) // This email is invalid -> returns Result.Errors
         .on(PhoneNumber.of("xxx")) // This phone number is invalid -> returns Result.Errors
         .on("Foo")
         .result
     
-    when(user){
-        is Result.Ok -> user.toString()
-        is Result.Errors -> user.toList().joinToString(" - ") { it.error.description(" - ") }  
-    }.run { println(this) } // This is going to print "foo.bar doesn't match an email format - xxx should match a valid phone number, but it doesn't
+    when(userResult){
+        is Result.Ok -> userResult.toString()
+        is Result.Errors -> userResult.toList().joinToString(" - ")
+    }.run(::println) // This is going to print "foo.bar doesn't match an email format - xxx should match a valid phone number, but it doesn't
+    
+    // or
+    
+    userResult
+       .map{ user -> user.toString() }
+       .ifError { errors -> description(errorDescriptionsSeparator = " - ") }
+       .run(::println)
 
 ```
 
