@@ -6,58 +6,58 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class EitherTests : StringSpec({
+class ValidationTests : StringSpec({
 
-    "left case should throw"{
+    "fail case should throw"{
         shouldThrow<EitherException> { Validation.Fail("ciao").get() }
     }
 
-    "right case should return the value"{
+    "success case should return the value"{
         Validation.Success("ciao").get() shouldBe "ciao"
     }
 
-    "If the result is Right, when i get the result or default, then it returns the value"{
-        Validation.Success(1).ifLeft(2) shouldBe 1
+    "If the result is success, when i get the result or default, then it returns the value"{
+        Validation.Success(1).ifFail(2) shouldBe 1
     }
 
     "If the result is OK, when i get the result or default, then it returns the default"{
-        Validation.Fail("booom").ifLeft(2) shouldBe 2
+        Validation.Fail("booom").ifFail(2) shouldBe 2
     }
 
-    "mapping the right case should execute the mapping function"{
+    "mapping the success case should execute the mapping function"{
         Validation.Success(1)
             .map { it.toString() }
             .get() shouldBe "1"
     }
 
-    "flatMapping the right case should execute the mapping function"{
+    "flatMapping the success case should execute the mapping function"{
         Validation.Success(1)
             .flatMap { Validation.Success(it.toString()) }
-            .ifLeft(2) shouldBe "1"
+            .ifFail(2) shouldBe "1"
     }
 
-    "flatMapping the left case should not the mapping function"{
-        val right: Validation<String, Int> = Validation.Success(1)
-        right
+    "flatMapping the fail case should not the mapping function"{
+        val success: Validation<String, Int> = Validation.Success(1)
+        success
             .flatMap { Validation.Fail("booom") }
-            .ifLeft(2) shouldBe 2
+            .ifFail(2) shouldBe 2
     }
 
-    "flatMapping starting from a left case returns left"{
-        val right: Validation<String, Int> = Validation.Fail("booom")
-        right
+    "flatMapping starting from a fail case returns fail"{
+        val success: Validation<String, Int> = Validation.Fail("booom")
+        success
             .flatMap { Validation.Success(1) }
-            .ifLeft(2) shouldBe 2
+            .ifFail(2) shouldBe 2
     }
 
-    "flatMapping starting from a left short-circuits on the first left"{
-        val right: Validation<String, String> = Validation.Fail("booom 1")
-        right
+    "flatMapping starting from a fail short-circuits on the first fail"{
+        val success: Validation<String, String> = Validation.Fail("booom 1")
+        success
             .flatMap { Validation.Fail("booom 2") }
-            .ifLeft { it } shouldBe "booom 1"
+            .ifFail { it.first() } shouldBe "booom 1"
     }
 
-    "mapping the left case, must not tranform the content"{
+    "mapping the fail case, must not tranform the content"{
         Validation.Fail("booom").map { it } shouldBe Validation.Fail("booom")
     }
 
@@ -68,7 +68,15 @@ class EitherTests : StringSpec({
         y.get() shouldBe 2
     }
 
-    "either can be composed"{
+    "validation fail gets accumulated"{
+        val x: Validation<TestError, Int> = TestError.fail()
+        val fnError: Validation<TestError, (Int) -> Int> = TestError.fail()
+        val result = x.ap(fnError)
+
+        result.ifFail { it.size } shouldBe 2
+    }
+
+    "validation can be composed"{
         val f: (Int, String, Double) -> String = { _, _, _ -> "ciao"}
         val out: Validation<String, String> = f.curry()
             .on("error".fail())
@@ -76,7 +84,15 @@ class EitherTests : StringSpec({
             .on(0.0)
             .validation()
 
-        out.ifLeft { it } shouldBe "error"
+        out.ifFail { it.first() } shouldBe "error"
+    }
+
+    "validation can be flattened"(){
+        val l: List<Validation<TestError, Int>> = listOf(0.success(), TestError.fail(), 1.success())
+
+        l.flatten() shouldBe TestError.fail()
     }
 
 })
+
+internal object TestError
