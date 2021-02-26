@@ -9,72 +9,72 @@ import io.kotest.matchers.shouldBe
 class EitherTests : StringSpec({
 
     "left case should throw"{
-        shouldThrow<EitherException> { Either.Left("ciao").get() }
+        shouldThrow<EitherException> { Validation.Fail("ciao").get() }
     }
 
     "right case should return the value"{
-        Either.Right("ciao").get() shouldBe "ciao"
+        Validation.Success("ciao").get() shouldBe "ciao"
     }
 
     "If the result is Right, when i get the result or default, then it returns the value"{
-        Either.Right(1).ifLeft(2) shouldBe 1
+        Validation.Success(1).ifLeft(2) shouldBe 1
     }
 
     "If the result is OK, when i get the result or default, then it returns the default"{
-        Either.Left("booom").ifLeft(2) shouldBe 2
+        Validation.Fail("booom").ifLeft(2) shouldBe 2
     }
 
     "mapping the right case should execute the mapping function"{
-        Either.Right(1)
+        Validation.Success(1)
             .map { it.toString() }
             .get() shouldBe "1"
     }
 
     "flatMapping the right case should execute the mapping function"{
-        Either.Right(1)
-            .flatMap { Either.Right(it.toString()) }
+        Validation.Success(1)
+            .flatMap { Validation.Success(it.toString()) }
             .ifLeft(2) shouldBe "1"
     }
 
     "flatMapping the left case should not the mapping function"{
-        val right: Either<String, Int> = Either.Right(1)
+        val right: Validation<String, Int> = Validation.Success(1)
         right
-            .flatMap { Either.Left("booom") }
+            .flatMap { Validation.Fail("booom") }
             .ifLeft(2) shouldBe 2
     }
 
     "flatMapping starting from a left case returns left"{
-        val right: Either<String, Int> = Either.Left("booom")
+        val right: Validation<String, Int> = Validation.Fail("booom")
         right
-            .flatMap { Either.Right(1) }
+            .flatMap { Validation.Success(1) }
             .ifLeft(2) shouldBe 2
     }
 
     "flatMapping starting from a left short-circuits on the first left"{
-        val right: Either<String, String> = Either.Left("booom 1")
+        val right: Validation<String, String> = Validation.Fail("booom 1")
         right
-            .flatMap { Either.Left("booom 2") }
+            .flatMap { Validation.Fail("booom 2") }
             .ifLeft { it } shouldBe "booom 1"
     }
 
     "mapping the left case, must not tranform the content"{
-        Either.Left("booom").map { it } shouldBe Either.Left("booom")
+        Validation.Fail("booom").map { it } shouldBe Validation.Fail("booom")
     }
 
     "A lifted function can be applied" {
-        val liftedFn = Either.pure { x: Int -> x + 1 }
-        val y: Either<String, Int> = Either.pure(1).ap(liftedFn)
+        val liftedFn = Validation.pure { x: Int -> x + 1 }
+        val y: Validation<String, Int> = Validation.pure(1).ap(liftedFn)
 
         y.get() shouldBe 2
     }
 
     "either can be composed"{
         val f: (Int, String, Double) -> String = { _, _, _ -> "ciao"}
-        val out: Either<String, String> = f.curry()
-            .on("error".left())
-            .on("".right())
+        val out: Validation<String, String> = f.curry()
+            .on("error".fail())
+            .on("".success())
             .on(0.0)
-            .either()
+            .validation()
 
         out.ifLeft { it } shouldBe "error"
     }
