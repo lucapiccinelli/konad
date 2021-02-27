@@ -37,7 +37,6 @@ sealed class Validation<out A, out B>: ApplicativeFunctorKind<ValidationOf, B>, 
 }
 
 open class ValidationOf
-@Suppress("UNCHECKED_CAST")
 val <B> Kind<ValidationOf, B>.validation
     get() = this as Validation<*, B>
 
