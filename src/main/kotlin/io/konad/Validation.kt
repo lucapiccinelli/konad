@@ -30,6 +30,16 @@ sealed class Validation<out A, out B>: ApplicativeFunctorKind<ValidationOf, B>, 
     inline fun <C> map(fn: (B) -> C): Validation<A, C> =
         flatMap { Success(fn(it)) }
 
+    fun <D> mapFail(fn: (A) -> D): Validation<D, B> = when(this){
+        is Success -> this
+        is Fail -> Fail(fn(fail))
+    }
+
+    fun <D> mapAllFailures(fn: (Collection<A>) -> D): Validation<D, B> = when(this){
+        is Success -> this
+        is Fail -> Fail(fn(failures()))
+    }
+
     override fun <C> mapK(fn: (B) -> C): FunctorKind<ValidationOf, C> = map(fn)
     override fun <C> apMapK(fn: (B) -> C): ApplicativeFunctorKind<ValidationOf, C> = map(fn)
     override fun <C> flatMapK(fn: (B) -> MonadKind<ValidationOf, C>): MonadKind<ValidationOf, C> = flatMap { fn(it).validation }

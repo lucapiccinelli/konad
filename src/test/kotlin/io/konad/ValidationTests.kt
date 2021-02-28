@@ -93,6 +93,23 @@ class ValidationTests : StringSpec({
         l.flatten() shouldBe TestError.fail()
     }
 
+    "validation can map fail value"{
+        1.fail().mapFail { it + 1 }.ifFail { it.first().toString() } shouldBe "2"
+    }
+
+    "validation can map all failed values"{
+        1.fail().mapAllFailures { MappedError("mapped", it.toList()) }.ifFail { it.first() } shouldBe MappedError("mapped", listOf(1))
+    }
+
+    "mapping the failers of a success, return the success value"{
+        1.success().mapAllFailures { MappedError("mapped", it.toList()) }.ifFail { it.first() } shouldBe 1
+    }
+
+    "mapping the fail of a success, return the success value"{
+        1.success().mapFail { it }.ifFail { it } shouldBe 1
+    }
+
 })
 
 internal object TestError
+internal data class MappedError<out T>(val title: String, val errors: Collection<T>)
