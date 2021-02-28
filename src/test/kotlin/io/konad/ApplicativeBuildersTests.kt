@@ -1,11 +1,9 @@
 package io.konad
 
-import io.konad.Maybe.Companion.maybe
-import io.konad.Maybe.Companion.nullable
-import io.kotest.core.spec.style.StringSpec
-import io.konad.applicative.builders.*
+import io.konad.applicative.builders.on
 import io.konad.exceptions.ResultException
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class ApplicativeBuildersTests : StringSpec({
