@@ -2,7 +2,7 @@ package io.konad
 
 import io.konad.Maybe.Companion.maybe
 import io.konad.Maybe.Companion.nullable
-import io.konad.applicative.builders.flatten
+import io.konad.applicative.flatten
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
 import io.konad.hkt.Kind

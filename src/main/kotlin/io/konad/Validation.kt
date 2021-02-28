@@ -1,6 +1,6 @@
 package io.konad
 
-import io.konad.applicative.builders.flatten
+import io.konad.applicative.flatten
 import io.konad.exceptions.EitherException
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
