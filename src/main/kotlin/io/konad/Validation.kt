@@ -84,11 +84,14 @@ fun <A, B> Collection<Validation<A, B>>.flatten(): Validation<A, Collection<B>> 
     flatten(Validation.Companion::pure)
     .validation()
 
-
-inline fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
+fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
     is Result.Ok -> value.success()
     is Result.Errors -> errorTransform(this).fail()
 }
+
+fun <A, B> B?.ifNullValidation(errorTransform: () -> A): Validation<A, B> = this
+    ?.run { this.success() }
+    ?: errorTransform().fail()
 
 fun <A, T> Result<T>.toValidation(): Validation<Collection<Error>, T> = ifErrors { it.toList() }
 
