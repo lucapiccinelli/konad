@@ -93,7 +93,13 @@ fun <A, B> B?.ifNullValidation(errorTransform: () -> A): Validation<A, B> = this
     ?.run { this.success() }
     ?: errorTransform().fail()
 
-fun <A, T> Result<T>.toValidation(): Validation<Collection<Error>, T> = ifErrors { it.toList() }
+fun <T> Result<T>.toValidation(): Validation<Error, T> = when(this){
+    is Result.Ok -> value.success()
+    is Result.Errors -> toFail(this)
+}
+
+private fun toFail(errors: Result.Errors): Validation.Fail<Error> =
+    Validation.Fail(fail = errors.error, prev = errors.prev?.run(::toFail))
 
 fun <B> B.success(): Validation.Success<B> = Validation.Success(this)
 fun <A> A.fail(): Validation.Fail<A> = Validation.Fail(this)
