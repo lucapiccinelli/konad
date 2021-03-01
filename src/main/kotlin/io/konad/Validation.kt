@@ -65,7 +65,7 @@ fun <A, B, C> Validation<A, B>.ap(liftedFn: Validation<A, (B) -> C>): Validation
     is Validation.Success -> map(liftedFn.success)
     is Validation.Fail -> when(this){
         is Validation.Success -> liftedFn
-        is Validation.Fail -> Validation.Fail(fail, liftedFn)
+        is Validation.Fail -> Validation.Fail(fail, prev?.let { Validation.Fail(it.fail, liftedFn)} ?: liftedFn)
     }
 }
 

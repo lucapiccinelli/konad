@@ -41,7 +41,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Ok -> map(liftedFn.value)
         is Errors -> when(this){
             is Ok -> liftedFn
-            is Errors -> Errors(error, liftedFn)
+            is Errors -> Errors(error, prev?.let { Errors(it.error, liftedFn)} ?: liftedFn)
         }
     }
 
