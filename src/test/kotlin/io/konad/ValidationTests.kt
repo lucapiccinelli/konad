@@ -1,5 +1,6 @@
 package io.konad
 
+import io.konad.applicative.builders.ap
 import io.konad.applicative.builders.on
 import io.konad.exceptions.EitherException
 import io.kotest.assertions.throwables.shouldThrow
@@ -95,6 +96,17 @@ class ValidationTests : StringSpec({
 
     "validation can map fail value"{
         1.fail().mapFail { it + 1 }.ifFail { it.first().toString() } shouldBe "2"
+    }
+
+    "validation map fail return all the cumulated errors"{
+        val fn: (Int, Int, Int) -> List<Int> = { x, y, z -> listOf(x, y, z) }
+        val result: Validation<Int, List<Int>> = fn.curry()
+            .on(1.fail())
+            .on(2.fail())
+            .on(3.fail())
+            .validation()
+
+        result.mapFail { it * 10 }.ifFail { it.toList() } shouldBe listOf(10, 20, 30)
     }
 
     "validation can map all failed values"{

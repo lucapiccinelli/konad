@@ -16,6 +16,8 @@ sealed class Validation<out A, out B>: ApplicativeFunctorKind<ValidationOf, B>, 
             ?: emptyList()) +
             listOf(fail)
 
+        fun <D> transform(fn: (A) -> D): Fail<D> =
+            Fail(fail = fn(fail), prev = prev?.transform(fn))
     }
 
     companion object{
@@ -32,7 +34,7 @@ sealed class Validation<out A, out B>: ApplicativeFunctorKind<ValidationOf, B>, 
 
     fun <D> mapFail(fn: (A) -> D): Validation<D, B> = when(this){
         is Success -> this
-        is Fail -> Fail(fn(fail))
+        is Fail -> transform(fn)
     }
 
     fun <D> mapAllFailures(fn: (Collection<A>) -> D): Validation<D, B> = when(this){
@@ -82,5 +84,14 @@ fun <A, B> Collection<Validation<A, B>>.flatten(): Validation<A, Collection<B>> 
     flatten(Validation.Companion::pure)
     .validation()
 
+
+inline fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
+    is Result.Ok -> value.success()
+    is Result.Errors -> errorTransform(this).fail()
+}
+
+fun <A, T> Result<T>.toValidation(): Validation<Collection<Error>, T> = ifErrors { it.toList() }
+
 fun <B> B.success(): Validation.Success<B> = Validation.Success(this)
 fun <A> A.fail(): Validation.Fail<A> = Validation.Fail(this)
+

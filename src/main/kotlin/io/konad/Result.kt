@@ -81,9 +81,9 @@ fun <T> Result<T>.ifError(errorHandler: (Result.Errors) -> T) = when(this){
     is Result.Errors -> errorHandler(this)
 }
 
-fun <T> T?.ifNull(errorMessage: String) = this
+fun <T> T?.ifNull(errorMessage: String, errorCode: Int = 0) = this
     ?.run { Result.Ok(this) }
-    ?: Result.Errors(errorMessage)
+    ?: Result.Errors(Error(errorMessage, code = errorCode))
 
 open class ResultOf
 val <T> Kind<ResultOf, T>.result
