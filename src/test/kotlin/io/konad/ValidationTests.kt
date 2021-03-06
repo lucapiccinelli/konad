@@ -14,11 +14,11 @@ class ValidationTests : StringSpec({
     }
 
     "success case should return the value"{
-        Validation.Success("ciao").get() shouldBe "ciao"
+        Validation.Success<Any, String>("ciao").get() shouldBe "ciao"
     }
 
     "If the result is success, when i get the result or default, then it returns the value"{
-        Validation.Success(1).ifFail(2) shouldBe 1
+        Validation.Success<Any, Int>(1).ifFail(2) shouldBe 1
     }
 
     "If the result is OK, when i get the result or default, then it returns the default"{
@@ -26,13 +26,13 @@ class ValidationTests : StringSpec({
     }
 
     "mapping the success case should execute the mapping function"{
-        Validation.Success(1)
+        Validation.Success<Any, Int>(1)
             .map { it.toString() }
             .get() shouldBe "1"
     }
 
     "flatMapping the success case should execute the mapping function"{
-        Validation.Success(1)
+        Validation.Success<Any, Int>(1)
             .flatMap { Validation.Success(it.toString()) }
             .ifFail(2) shouldBe "1"
     }
@@ -63,8 +63,8 @@ class ValidationTests : StringSpec({
     }
 
     "A lifted function can be applied" {
-        val liftedFn = Validation.pure { x: Int -> x + 1 }
-        val y: Validation<String, Int> = Validation.pure(1).ap(liftedFn)
+        val liftedFn: Validation<String, (Int) -> Int> = Validation.pure { x: Int -> x + 1 }
+        val y: Validation<String, Int> = Validation.pure<String, Int>(1).ap(liftedFn)
 
         y.get() shouldBe 2
     }
@@ -114,11 +114,11 @@ class ValidationTests : StringSpec({
     }
 
     "mapping the failers of a success, return the success value"{
-        1.success().mapAllFailures { MappedError("mapped", it.toList()) }.ifFail { it.first() } shouldBe 1
+        1.success<Any, Int>().mapAllFailures { MappedError("mapped", it.toList()) }.ifFail { it.first() } shouldBe 1
     }
 
     "mapping the fail of a success, return the success value"{
-        1.success().mapFail { it }.ifFail { it } shouldBe 1
+        1.success<Any, Int>().mapFail { it }.ifFail { it } shouldBe 1
     }
 
 })

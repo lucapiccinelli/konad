@@ -1,9 +1,9 @@
 package io.konad.hkt
 
 
-interface Kind<F, out T>
+interface Kind<out F, out T>
 
-interface FunctorKind<F, out T>: Kind<F, T>{
+interface FunctorKind<out F, out T>: Kind<F, T>{
     fun <R> mapK(fn: (T) -> R): FunctorKind<F, R>
 }
 
