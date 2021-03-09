@@ -23,6 +23,10 @@ These are **monads** and **applicative functors**, so they implement the usual `
 
 Konad exists **with the only purpose** to let you easily compose these two classes.
 
+Advanced use-cases example are described here:
+ - [Nice Kotlin Nullables and Where to Find Them](https://medium.com/swlh/nice-kotlin-nullables-and-where-to-find-them-85d8de481e41?source=friends_link&sk=992c123a45421d26a6e21637e4ecdfcd)
+ - [Type-safe Domain Modeling in Kotlin](https://betterprogramming.pub/type-safe-domain-modeling-in-kotlin-425ddbc73732?source=friends_link&sk=2fedd10125b31cf7ca378878de4b3491)
+
 ## Getting started
 
 Add the dependency
