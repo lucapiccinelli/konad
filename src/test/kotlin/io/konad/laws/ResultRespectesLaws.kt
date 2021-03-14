@@ -1,11 +1,22 @@
 package io.konad.laws
 
 import io.konad.Result
+import io.konad.ResultOf
 import io.konad.error
+import io.konad.generators.result
 import io.konad.ok
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.*
 import io.kotest.property.checkAll
+
+class ResultFunctorLaws: FunctorLaws<ResultOf, Double, Double>(Arb.result(Arb.double()), Arb.double())
+class ResultMonadLaws: MonadLaws<ResultOf, Double, String>(
+    Result.Companion::pure,
+    Arb.result(Arb.double()),
+    Arb.result(Arb.string()),
+    Arb.double())
 
 class ResultRespectesLaws: StringSpec({
 
