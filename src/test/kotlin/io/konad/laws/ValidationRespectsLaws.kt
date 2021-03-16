@@ -1,11 +1,8 @@
 package io.konad.laws
 
-import io.konad.Result
-import io.konad.ResultOf
 import io.konad.Validation
 import io.konad.ValidationOf
 import io.konad.generators.functionAToB
-import io.konad.generators.result
 import io.konad.generators.validation
 import io.konad.hkt.Kind
 import io.kotest.property.Arb
