@@ -89,7 +89,7 @@ fun <A, B> Validation<A, B>.ifFail(errorHandler: (Collection<A>) -> B): B = when
 
 fun <A, B> Collection<Validation<A, B>>.flatten(): Validation<A, Collection<B>> =
     flatten(Validation.Companion::pure)
-    .validation()
+    .validation
 
 fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
     is Result.Ok -> value.success()
