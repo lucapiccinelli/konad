@@ -1,6 +1,7 @@
 package io.konad
 
 import ApplicativeFunctorKind2
+import Kind2_
 import MonadKind2
 import io.konad.applicative.flatten
 import io.konad.exceptions.EitherException
@@ -12,10 +13,10 @@ import io.konad.hkt.MonadKind
 open class ValidationOf
 
 @Deprecated("favour the use of the property version", ReplaceWith("Kind<Kind<ValidationOf, A>, B>.validation"))
-fun <A, B> Kind<Kind<ValidationOf, A>, B>.validation() =
+fun <A, B> Kind2_<ValidationOf, A, B>.validation() =
     this as Validation<A, B>
 
-val <A, B> Kind<Kind<ValidationOf, A>, B>.validation
+val <A, B> Kind2_<ValidationOf, A, B>.validation
     get() = this as Validation<A, B>
 
 sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFunctorKind2<ValidationOf, A, B> {
