@@ -83,7 +83,7 @@ class ValidationTests : StringSpec({
             .on("error".fail())
             .on("".success())
             .on(0.0)
-            .validation()
+            .validation
 
         out.ifFail { it.first() } shouldBe "error"
     }
@@ -104,7 +104,7 @@ class ValidationTests : StringSpec({
             .on(1.fail())
             .on(2.fail())
             .on(3.fail())
-            .validation()
+            .validation
 
         result.mapFail { it * 10 }.ifFail { it.toList() } shouldBe listOf(10, 20, 30)
     }

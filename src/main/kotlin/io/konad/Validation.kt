@@ -10,8 +10,13 @@ import io.konad.hkt.Kind
 import io.konad.hkt.MonadKind
 
 open class ValidationOf
+
+@Deprecated("favour the use of the property version", ReplaceWith("Kind<Kind<ValidationOf, A>, B>.validation"))
 fun <A, B> Kind<Kind<ValidationOf, A>, B>.validation() =
     this as Validation<A, B>
+
+val <A, B> Kind<Kind<ValidationOf, A>, B>.validation
+    get() = this as Validation<A, B>
 
 sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFunctorKind2<ValidationOf, A, B> {
     data class Success<A, out B>(val success: B): Validation<A, B>()
@@ -64,11 +69,11 @@ sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFu
 
     override fun <R> apMapK(fn: (B) -> R): ApplicativeFunctorKind<Kind<ValidationOf, A>, R> = map(fn)
 
-    override fun <R> apK(liftedFn: FunctorKind<Kind<ValidationOf, A>, (B) -> R>): ApplicativeFunctorKind<Kind<ValidationOf, A>, R> = ap(liftedFn.validation())
+    override fun <R> apK(liftedFn: FunctorKind<Kind<ValidationOf, A>, (B) -> R>): ApplicativeFunctorKind<Kind<ValidationOf, A>, R> = ap(liftedFn.validation)
 
     override fun <R> mapK(fn: (B) -> R): FunctorKind<Kind<ValidationOf, A>, R> = map(fn)
 
-    override fun <R> flatMapK(fn: (B) -> MonadKind<Kind<ValidationOf, A>, R>): MonadKind<Kind<ValidationOf, A>, R> = flatMap { fn(it).validation() }
+    override fun <R> flatMapK(fn: (B) -> MonadKind<Kind<ValidationOf, A>, R>): MonadKind<Kind<ValidationOf, A>, R> = flatMap { fn(it).validation }
 }
 
 fun <A, B> Validation<A, B>.ifFail(default: B): B = when(this){
