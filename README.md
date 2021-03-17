@@ -15,13 +15,14 @@ Also, Arrow is a real functional library, with a plenty of functional concepts t
 
 ## Konad to the OOP rescue
 
-Here it comes Konad. It has only two classes:
+Here it comes Konad. It has only three classes:
  - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
+ - [**Validation**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Validation.kt): can be `Validation.Success` or `Validation.Fail`.
  - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
  
 These are **monads** and **applicative functors**, so they implement the usual `map`, `flatMap` and `ap` methods. 
 
-Konad exists **with the only purpose** to let you easily compose these two classes.
+Konad exists **with the only purpose** to let you easily compose these three classes.
 
 Advanced use-cases examples are described here:
  - [Nice Kotlin Nullables and Where to Find Them](https://medium.com/swlh/nice-kotlin-nullables-and-where-to-find-them-85d8de481e41?source=friends_link&sk=992c123a45421d26a6e21637e4ecdfcd)
@@ -181,6 +182,30 @@ val result: Result<Int> = ::useThem.curry()
 
 ```
 
+<a name="validation"></a>
+## Validation
+
+`Validation<A, B>` is like an `Either` monad, but with the left case accumulation. It is similar to `Result<T>` but instead of fixing the error case as a string description, it lets you
+decide how you represent the error. Example:
+
+```kotlin
+
+sealed class ResourceError {
+    data class BadInput(val description: String) : ResourceError()
+    object NotFound : ResourceError()
+    object Forbidden : ResourceError()
+}
+
+fun readUser(id: String): Validation<ResourceError, User> =
+    if (id.isBlank()) ResourceError.BadInput("id should not be blank").fail()
+    else repository.findById(id)?.success() ?: ResourceError.NotFound.fail()
+
+readUser("xxx")
+    .map { user: User -> println(user) }
+    .ifFail { failures: Collection<ResourceError> -> println(failures) }
+
+```
+
 ## Flatten
 
 What if you have a `List<Result<T>>` and you want a `Result<List<T>>`? Then use `flatten` extension method.
@@ -210,6 +235,51 @@ val flattened = setOf("a", null, "c").flatten()
 
 flattened shouldBe null
 ```
+
+and on Validation
+
+```kotlin
+val v: Validation<String, Collection<Int>> = listOf("error1".fail(), 1.success(), "error2".fail()).flatten()
+```
+
+## Error enrichment
+
+Sometime you need to add some details on an error, or to transform it. `Result` and `Validation` monads have convenience method for this case.
+Examples:
+
+```kotlin
+fun checkNotEmpty(value: String) = if(value.isBlank()) "value should not be blank".error() else value.ok()
+
+data class User private constructor(val firstName: String, val lastname: String){
+    companion object{
+        fun of(firstname: String, lastname: String): Result<User> = ::User.curry()
+            .on(checkNotEmpty(firstname))
+            .on(checkNotEmpty(lastname))
+            .result
+    }
+}
+
+```
+
+in this example, if both `firstname` and `lastname` are blank, then you will get two errors. Unfortunately both of those errors will have the same description, and you will not be
+able to distinct which `value should not be empty`. To fix, there is the method `Result::errorTitle`
+
+```kotlin
+
+fun of(firstname: String, lastname: String): Result<User> = ::User.curry()
+    .on(checkNotEmpty(firstname).errorTitle("firstname"))
+    .on(checkNotEmpty(lastname).errorTitle("lastname"))
+    .result
+
+```
+
+You can find a more detailed specification here:
+[ResultTests](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ResultTests.kt#L106)
+
+Similarly, `Validation` has the `mapFail` method, to apply a tranformation on the error case. Examples here
+[ValidationTests](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ValidationTests.kt#L101)
+
+In case of accumulated errors, both `errorTitle` and `mapFail` are applied to the entire list of errors.
 
 ## Extend with your own composable monads
 

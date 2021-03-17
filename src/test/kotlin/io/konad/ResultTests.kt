@@ -1,5 +1,6 @@
 package io.konad
 
+import io.konad.applicative.builders.on
 import io.konad.exceptions.ResultException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
@@ -111,4 +112,13 @@ class ResultTests: StringSpec({
     }
 })
 
+fun checkNotEmpty(value: String) = if(value.isBlank()) "value should not be blank".error() else value.ok()
 
+data class User private constructor(val firstName: String, val lastname: String){
+    companion object{
+        fun of(firstname: String, lastname: String): Result<User> = ::User.curry()
+            .on(checkNotEmpty(firstname).errorTitle("firsname"))
+            .on(checkNotEmpty(lastname).errorTitle("lastname"))
+            .result
+    }
+}
