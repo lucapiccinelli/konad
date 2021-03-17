@@ -111,14 +111,3 @@ class ResultTests: StringSpec({
         (newError as Result.Errors).description(errorDescriptionsSeparator = ",") shouldBe "banana: x,banana: y"
     }
 })
-
-fun checkNotEmpty(value: String) = if(value.isBlank()) "value should not be blank".error() else value.ok()
-
-data class User private constructor(val firstName: String, val lastname: String){
-    companion object{
-        fun of(firstname: String, lastname: String): Result<User> = ::User.curry()
-            .on(checkNotEmpty(firstname).errorTitle("firsname"))
-            .on(checkNotEmpty(lastname).errorTitle("lastname"))
-            .result
-    }
-}
