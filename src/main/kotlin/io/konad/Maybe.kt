@@ -9,7 +9,7 @@ import io.konad.hkt.FunctorKind
 import io.konad.hkt.Kind
 import io.konad.hkt.MonadKind
 
-typealias MaybeOf = Any?
+open class MaybeOf
 
 data class Maybe<out T> private constructor(private val value: T?):
     MonadKind<MaybeOf, T>,
@@ -25,7 +25,7 @@ data class Maybe<out T> private constructor(private val value: T?):
             get() = downcast().value
 
         infix fun <T: Any, R> ((T) -> R)?.on(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
-        infix fun <F, T: Any, R> FunctorKind<F, ((T) -> R)>?.on(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
+        infix fun <T: Any, R> FunctorKind<MaybeOf, ((T) -> R)>?.on(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
     }
 
     private inline fun <R> map(fn: (T) -> R): Maybe<R> = flatMap{ Maybe(fn(it)) }
