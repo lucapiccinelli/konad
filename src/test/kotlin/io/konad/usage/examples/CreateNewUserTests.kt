@@ -1,8 +1,9 @@
 package io.konad.usage.examples
 
 import io.konad.*
-import io.konad.Maybe.Companion.maybe
 import io.konad.Maybe.Companion.nullable
+import io.konad.Maybe.Companion.plus
+import io.konad.Result.Companion.plus
 import io.konad.applicative.builders.*
 import io.konad.exceptions.ResultException
 import io.konad.usage.examples.model.*
@@ -38,13 +39,16 @@ class CreateNewUserTests : StringSpec({
             } } }
 
     "How to build a new user" {
-        val user: Result<User> = ::User.curry()
-            .on(username)
-            .on(NameOfAPerson(firstname, lastname))
-            .on(Password.of(passwordValue))
-            .on(::UserContacts.curry() on Email.of(emailValue) on PhoneNumber.of(phoneNumberValue))
-            .on(jobDescription.ifNull("job description should not be null"))
-            .result
+        val contacts: Result<UserContacts> = ::UserContacts +
+            Email.of(emailValue) +
+            PhoneNumber.of(phoneNumberValue)
+
+        val user: Result<User> = ::User +
+            username +
+            NameOfAPerson(firstname, lastname).ok() +
+            Password.of(passwordValue) +
+            contacts +
+            jobDescription.ifNull("job description should not be null")
 
         user shouldBe expectedUser
     }
@@ -81,14 +85,17 @@ class CreateNewUserTests : StringSpec({
         errors?.toList()?.joinToString(",") { it.description } shouldBe "xxx should match a valid phone number, but it doesn't,job description should not be null"
     }
 
-    "Example of build a nullable User"{
-        val user: User? = ::User.curry()
-            .on(username.maybe)
-            .on(NameOfAPerson(firstname, lastname))
-            .on(Password.of(passwordValue).toMaybe())
-            .on(::UserContacts.curry() on Email.of(emailValue).toMaybe() on PhoneNumber.of(phoneNumberValue).toMaybe())
-            .on(jobDescription.maybe)
-            .nullable
+    "Example of build a nullable User" {
+        val userContacts: UserContacts? = ::UserContacts +
+            Email.of(emailValue).toNullable() +
+            PhoneNumber.of(phoneNumberValue).toNullable()
+
+        val user: User? = ::User +
+            username +
+            NameOfAPerson(firstname, lastname) +
+            Password.of(passwordValue).toNullable() +
+            userContacts +
+            jobDescription
 
         user shouldBe expectedUser.get()
     }
@@ -99,7 +106,7 @@ class CreateNewUserTests : StringSpec({
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue).toMaybe())
             .on(::UserContacts.curry() on Email.of(emailValue).toMaybe() on PhoneNumber.of("xxx").toMaybe())
-            .on(jobDescription.maybe)
+            .on(jobDescription)
             .nullable
 
         user shouldBe null
@@ -109,10 +116,9 @@ class CreateNewUserTests : StringSpec({
         val xx: Int? = 1
         val yy: Int? = null
 
-        val total: Int = { x: Int, y: Int -> x + y }.curry()
-            .on(xx.ifNull("xx should not be null"))
-            .on(yy.ifNull("yy should not be null"))
-            .result
+        val total: Int = ({ x: Int, y: Int -> x + y } +
+            xx.ifNull("xx should not be null") +
+            yy.ifNull("yy should not be null"))
             .ifError(-1)
 
         total shouldBe -1

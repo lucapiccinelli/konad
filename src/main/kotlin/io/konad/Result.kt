@@ -62,10 +62,12 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Errors -> throw ResultException(this)
     }
 
-    fun toMaybe(): ApplicativeFunctorKind<MaybeOf, T> = when(this){
+    fun toMaybe(): ApplicativeFunctorKind<MaybeOf, T> = toNullable().maybe
+
+    fun toNullable(): T? = when(this){
         is Ok -> value
         is Errors -> null
-    }.maybe
+    }
 
     fun errorTitle(title: String): Result<T> = when(this) {
         is Ok -> this
