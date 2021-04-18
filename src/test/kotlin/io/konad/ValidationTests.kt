@@ -1,6 +1,8 @@
 package io.konad
 
+import io.konad.Validation.Companion.plus
 import io.konad.applicative.builders.on
+import io.konad.applicative.builders.plus
 import io.konad.exceptions.EitherException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
@@ -78,11 +80,7 @@ class ValidationTests : StringSpec({
 
     "validation can be composed"{
         val f: (Int, String, Double) -> String = { _, _, _ -> "ciao"}
-        val out: Validation<String, String> = f.curry()
-            .on("error".fail())
-            .on("".success())
-            .on(0.0)
-            .validation
+        val out: Validation<String, String> = f + "error".fail() + "".success() + 0.0
 
         out.ifFail { it.first() } shouldBe "error"
     }
@@ -99,11 +97,7 @@ class ValidationTests : StringSpec({
 
     "validation map fail return all the cumulated errors"{
         val fn: (Int, Int, Int) -> List<Int> = { x, y, z -> listOf(x, y, z) }
-        val result: Validation<Int, List<Int>> = fn.curry()
-            .on(1.fail())
-            .on(2.fail())
-            .on(3.fail())
-            .validation
+        val result: Validation<Int, List<Int>> = fn + 1.fail() + 2.fail() + 3.fail()
 
         result.mapFail { it * 10 }.ifFail { it.toList() } shouldBe listOf(10, 20, 30)
     }

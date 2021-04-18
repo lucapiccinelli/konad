@@ -27,7 +27,5 @@ data class User(
             Password.of(password) +
             (::UserContacts + Email.of(email) + PhoneNumber.of(phoneNumber)) +
             jobDescription.ifNull("job description should not be null")
-
-
     }
 }
