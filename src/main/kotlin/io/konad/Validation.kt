@@ -1,7 +1,6 @@
 package io.konad
 
 import ApplicativeFunctorKind2
-import FunctorKind2_
 import Kind2_
 import MonadKind2
 import io.konad.applicative.flatten
@@ -10,7 +9,7 @@ import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
 import io.konad.hkt.Kind
 import io.konad.hkt.MonadKind
-import io.konad.applicative.builders.on as apOn
+import io.konad.applicative.builders.on
 
 open class ValidationOf
 
@@ -37,9 +36,10 @@ sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFu
     companion object{
         fun <A, B> pure(value: B): Validation<A, B> = Success(value)
 
-        infix fun <A, B, C> ((B) -> C).on(v: Validation<A, B>): Validation<A, C> = apOn(v).validation
-        infix fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.on(v: Validation<A, B>): Validation<A, C> = apOn(v).validation
-        infix fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.on(v: B): Validation<A, C> = apOn(v).validation
+        infix operator fun <A, B, C> ((B) -> C).plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+        infix operator fun <A, B, C> ApplicativeFunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+        infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+        infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: B): Validation<A, C> = on(v).validation
     }
 
     fun get(): B = when(this){

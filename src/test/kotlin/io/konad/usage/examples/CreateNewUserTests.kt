@@ -38,11 +38,11 @@ class CreateNewUserTests : StringSpec({
             } } }
 
     "How to build a new user" {
-        val user = ::User.curry()
+        val user: Result<User> = ::User.curry()
             .on(username)
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue))
-            .on(::UserContacts.curry() on Email.of(emailValue) on PhoneNumber.of(phoneNumberValue))
+            .on(::UserContacts on Email.of(emailValue) on PhoneNumber.of(phoneNumberValue))
             .on(jobDescription.ifNull("job description should not be null"))
             .result
 
@@ -64,8 +64,8 @@ class CreateNewUserTests : StringSpec({
     }
 
     "Example of cumulating errors" {
-        val user = ::User.curry()
-            .on(username)
+        val user = ::User
+            .on(username.ok())
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue))
             .on(::UserContacts.curry() on Email.of(emailValue) on PhoneNumber.of("xxx"))
@@ -82,8 +82,8 @@ class CreateNewUserTests : StringSpec({
     }
 
     "Example of build a nullable User"{
-        val user: User? = ::User.curry()
-            .on(username)
+        val user: User? = ::User
+            .on(username.maybe)
             .on(NameOfAPerson(firstname, lastname))
             .on(Password.of(passwordValue).toMaybe())
             .on(::UserContacts.curry() on Email.of(emailValue).toMaybe() on PhoneNumber.of(phoneNumberValue).toMaybe())

@@ -1,6 +1,5 @@
 package io.konad
 
-import io.konad.Validation.Companion.on
 import io.konad.applicative.builders.on
 import io.konad.exceptions.EitherException
 import io.kotest.assertions.throwables.shouldThrow
@@ -79,10 +78,11 @@ class ValidationTests : StringSpec({
 
     "validation can be composed"{
         val f: (Int, String, Double) -> String = { _, _, _ -> "ciao"}
-        val out: Validation<String, String> = f
+        val out: Validation<String, String> = f.curry()
             .on("error".fail())
             .on("".success())
             .on(0.0)
+            .validation
 
         out.ifFail { it.first() } shouldBe "error"
     }

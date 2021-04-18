@@ -1,6 +1,5 @@
 package io.konad
 
-import io.konad.Result.Companion.on
 import io.konad.applicative.builders.on
 import io.konad.exceptions.ResultException
 import io.kotest.assertions.throwables.shouldThrow
@@ -13,10 +12,11 @@ class ApplicativeBuildersTests : StringSpec({
     val expected = Person(false, 4, "Foo")
 
     "Build a Result of a Person from intermediate results. Example of Result composition" {
-        val person: Result<Person> = ::Person
+        val person: Result<Person> = ::Person.curry()
             .on(Result.pure(false))
             .on(Result.pure(4))
             .on( "Foo")
+            .result
 
         person.get() shouldBe expected
     }
@@ -26,7 +26,7 @@ class ApplicativeBuildersTests : StringSpec({
         val error2 = Result.Errors("apple")
         val error3 = Result.Errors("pear")
 
-        val person: Result<Person> = ::Person on error1 on error2 on error3
+        val person: Result<Person> = (::Person.curry() on error1 on error2 on error3).result
 
         val ex = shouldThrow<ResultException> { person.get() }
         ex.errors.toList() shouldBe listOf(error1.error, error2.error, error3.error)
