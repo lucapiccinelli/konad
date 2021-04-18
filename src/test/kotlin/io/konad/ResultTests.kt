@@ -1,6 +1,7 @@
 package io.konad
 
-import io.konad.applicative.builders.on
+import io.konad.Result.Companion.plus
+import io.konad.applicative.builders.plus
 import io.konad.exceptions.ResultException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec

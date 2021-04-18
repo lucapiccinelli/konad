@@ -85,12 +85,11 @@ In order to compose them and get a `Result<User>` you have to do the following
 
 ```kotlin
 
-    val userResult: Result<User> = ::User.curry()
-        .on("foo.bar")
-        .on(Email.of("foo.bar")) // This email is invalid -> returns Result.Errors
-        .on(PhoneNumber.of("xxx")) // This phone number is invalid -> returns Result.Errors
-        .on("Foo")
-        .result
+    val userResult: Result<User> = ::User +
+        "foo.bar" +
+        Email.of("foo.bar") + // This email is invalid -> returns Result.Errors
+        PhoneNumber.of("xxx") + // This phone number is invalid -> returns Result.Errors
+        "Foo"
     
     when(userResult){
         is Result.Ok -> userResult.toString()
@@ -162,11 +161,7 @@ Using Konad, nullables can be composed as follows
 
 ```kotlin
 
-val result: Int? = ::useThem.curry() 
-    .on(foo.maybe) 
-    .on(bar.maybe) 
-    .on(baz.maybe)
-    .nullable
+val result: Int? = ::useThem + foo + bar + baz
 
 ```
 
@@ -174,11 +169,10 @@ or you can choose to give an explanatory message when something is `null`
 
 ```kotlin
 
-val result: Result<Int> = ::useThem.curry() 
-    .on(foo.ifNull("Foo should not be null")) 
-    .on(bar.ifNull("Bar should not be null")) 
-    .on(baz.ifNull("Baz should not be null"))
-    .result
+val result: Result<Int> = ::useThem +
+    foo.ifNull("Foo should not be null") +
+    bar.ifNull("Bar should not be null") +
+    baz.ifNull("Baz should not be null")
 
 ```
 
