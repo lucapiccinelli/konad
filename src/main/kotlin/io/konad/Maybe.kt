@@ -24,9 +24,9 @@ data class Maybe<out T> private constructor(private val value: T?):
         val <T: Any> Kind<MaybeOf, T>.nullable: T?
             get() = downcast().value
 
-        infix operator fun <T: Any, R> ((T) -> R)?.plus(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
-        infix operator fun <T: Any, R> ApplicativeFunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
-        infix operator fun <T: Any, R> FunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
+        infix operator fun <T: Any, R: Any> ((T) -> R)?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
+        infix operator fun <T: Any, R: Any> ApplicativeFunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
+        infix operator fun <T: Any, R: Any> FunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
     }
 
     private inline fun <R> map(fn: (T) -> R): Maybe<R> = flatMap{ Maybe(fn(it)) }
@@ -46,3 +46,26 @@ fun <T> Collection<T?>.flatten(): Collection<T>? = asSequence().map { it.maybe }
     .flatten(Maybe.Companion::pure)
     .nullable
     ?.toList()
+
+infix operator fun <A: Any, B, RESULT> ((A, B) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, RESULT> ((A, B, C) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, RESULT> ((A, B, C, D) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, RESULT> ((A, B, C, D, E) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, RESULT> ((A, B, C, D, E, F) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, RESULT> ((A, B, C, D, E, F, G) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, RESULT> ((A, B, C, D, E, F, G, H) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, RESULT> ((A, B, C, D, E, F, G, H, I) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J,RESULT> ((A, B, C, D, E, F, G, H, I, J) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, RESULT> ((A, B, C, D, E, F, G, H, I, J, K) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V) -> RESULT).plus(a: A?) = curry().on(a.maybe)
+infix operator fun <A: Any, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, RESULT> ((A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W) -> RESULT).plus(a: A?) = curry().on(a.maybe)

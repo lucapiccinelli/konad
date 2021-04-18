@@ -1,5 +1,6 @@
 package io.konad.applicative.builders
 
+import io.konad.Maybe.Companion.maybe
 import io.konad.curry
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
