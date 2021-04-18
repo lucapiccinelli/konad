@@ -2,6 +2,7 @@ package io.konad
 
 import io.konad.Maybe.Companion.maybe
 import io.konad.Maybe.Companion.nullable
+import io.konad.applicative.builders.on
 import io.konad.applicative.flatten
 import io.konad.hkt.ApplicativeFunctorKind
 import io.konad.hkt.FunctorKind
@@ -15,13 +16,16 @@ data class Maybe<out T> private constructor(private val value: T?):
     ApplicativeFunctorKind<MaybeOf, T> {
 
     companion object{
-        private fun <T> Kind<MaybeOf, T>.downcast() = this as Maybe<T>
+        fun <T> Kind<MaybeOf, T>.downcast() = this as Maybe<T>
 
         fun <T: Any> pure(value: T) = Maybe(value)
         val <T: Any> T?.maybe: Maybe<T>
             get() = Maybe(this)
         val <T: Any> Kind<MaybeOf, T>.nullable: T?
             get() = downcast().value
+
+        infix fun <T: Any, R> ((T) -> R)?.on(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
+        infix fun <F, T: Any, R> FunctorKind<F, ((T) -> R)>?.on(t: T?): R? = this?.on(t.maybe)?.downcast()?.value
     }
 
     private inline fun <R> map(fn: (T) -> R): Maybe<R> = flatMap{ Maybe(fn(it)) }
