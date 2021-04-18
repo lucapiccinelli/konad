@@ -9,3 +9,4 @@ interface ApplicativeFunctorKind2<F, A, out B>: FunctorKind2<F, A, B>, Applicati
 interface MonadKind2<F, A, out B>: FunctorKind2<F, A, B>, MonadKind<Kind<F, A>, B>
 
 typealias Kind2_<F, A, B> = Kind<Kind<F, A>, B>
+typealias FunctorKind2_<F, A, B> = FunctorKind<FunctorKind<F, A>, B>
