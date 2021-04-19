@@ -2,8 +2,6 @@ package io.konad.usage.examples
 
 import io.konad.*
 import io.konad.Maybe.Companion.nullable
-import io.konad.Maybe.Companion.plus
-import io.konad.Result.Companion.plus
 import io.konad.applicative.builders.*
 import io.konad.exceptions.ResultException
 import io.konad.usage.examples.model.*

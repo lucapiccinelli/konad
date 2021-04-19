@@ -1,6 +1,5 @@
 package io.konad
 
-import io.konad.Result.Companion.plus
 import io.konad.applicative.builders.on
 import io.konad.applicative.builders.plus
 import io.konad.exceptions.ResultException

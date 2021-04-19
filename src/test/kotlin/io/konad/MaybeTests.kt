@@ -1,7 +1,5 @@
 package io.konad
 
-import io.konad.Maybe.Companion.maybe
-import io.konad.Maybe.Companion.plus
 import io.konad.applicative.builders.plus
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

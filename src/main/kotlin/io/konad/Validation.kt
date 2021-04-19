@@ -35,11 +35,6 @@ sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFu
 
     companion object{
         fun <A, B> pure(value: B): Validation<A, B> = Success(value)
-
-        infix operator fun <A, B, C> ((B) -> C).plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
-        infix operator fun <A, B, C> ApplicativeFunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
-        infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
-        infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: B): Validation<A, C> = on(v).validation
     }
 
     fun get(): B = when(this){
@@ -116,3 +111,8 @@ fun <A> A.fail(): Validation.Fail<A> = Validation.Fail(this)
 
 private fun toFail(errors: Result.Errors): Validation.Fail<Error> =
     Validation.Fail(fail = errors.error, prev = errors.prev?.run(::toFail))
+
+infix operator fun <A, B, C> ((B) -> C).plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+infix operator fun <A, B, C> ApplicativeFunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: Validation<A, B>): Validation<A, C> = on(v).validation
+infix operator fun <A, B, C> FunctorKind<Kind<ValidationOf, A>, ((B) -> C)>.plus(v: B): Validation<A, C> = on(v).validation

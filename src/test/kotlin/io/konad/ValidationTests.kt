@@ -1,7 +1,5 @@
 package io.konad
 
-import io.konad.Validation.Companion.plus
-import io.konad.applicative.builders.on
 import io.konad.applicative.builders.plus
 import io.konad.exceptions.EitherException
 import io.kotest.assertions.throwables.shouldThrow

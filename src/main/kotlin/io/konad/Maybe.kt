@@ -23,10 +23,6 @@ data class Maybe<out T> private constructor(private val value: T?):
             get() = Maybe(this)
         val <T: Any> Kind<MaybeOf, T>.nullable: T?
             get() = downcast().value
-
-        infix operator fun <T: Any, R: Any> ((T) -> R)?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
-        infix operator fun <T: Any, R: Any> ApplicativeFunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
-        infix operator fun <T: Any, R: Any> FunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
     }
 
     private inline fun <R> map(fn: (T) -> R): Maybe<R> = flatMap{ Maybe(fn(it)) }
@@ -46,6 +42,10 @@ fun <T> Collection<T?>.flatten(): Collection<T>? = asSequence().map { it.maybe }
     .flatten(Maybe.Companion::pure)
     .nullable
     ?.toList()
+
+infix operator fun <T: Any, R: Any> ((T) -> R)?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
+infix operator fun <T: Any, R: Any> ApplicativeFunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
+infix operator fun <T: Any, R: Any> FunctorKind<MaybeOf, ((T) -> R)>?.plus(t: T?): R? = this?.on(t.maybe)?.nullable
 
 infix operator fun <A: Any, B, RESULT> ((A, B) -> RESULT).plus(a: A?) = curry().on(a.maybe)
 infix operator fun <A: Any, B, C, RESULT> ((A, B, C) -> RESULT).plus(a: A?) = curry().on(a.maybe)

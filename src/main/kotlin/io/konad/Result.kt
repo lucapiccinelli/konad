@@ -29,11 +29,6 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
 
     companion object{
         fun <T> pure(value: T): Result<T> = value.ok()
-
-        infix operator fun <T, R> ((T) -> R).plus(t: Result<T>): Result<R> = on(t).result
-        infix operator fun <T, R> ApplicativeFunctorKind<ResultOf, ((T) -> R)>.plus(t: Result<T>): Result<R> = on(t).result
-        infix operator fun <T, R> FunctorKind<ResultOf, ((T) -> R)>.plus(t: Result<T>): Result<R> = on(t).result
-        infix operator fun <T, R> FunctorKind<ResultOf, ((T) -> R)>.plus(t: T): Result<R> = on(t).result
     }
 
     inline fun <R> map(fn: (T) -> R): Result<R> = flatMap { Ok(fn(it)) }
@@ -103,3 +98,8 @@ fun <T> Collection<Result<T>>.flatten(): Result<Collection<T>> =
 
 fun <T> T.ok(): Result.Ok<T> = Result.Ok(this)
 fun String.error(): Result.Errors = Result.Errors(this)
+
+infix operator fun <T, R> ((T) -> R).plus(t: Result<T>): Result<R> = on(t).result
+infix operator fun <T, R> ApplicativeFunctorKind<ResultOf, ((T) -> R)>.plus(t: Result<T>): Result<R> = on(t).result
+infix operator fun <T, R> FunctorKind<ResultOf, ((T) -> R)>.plus(t: Result<T>): Result<R> = on(t).result
+infix operator fun <T, R> FunctorKind<ResultOf, ((T) -> R)>.plus(t: T): Result<R> = on(t).result

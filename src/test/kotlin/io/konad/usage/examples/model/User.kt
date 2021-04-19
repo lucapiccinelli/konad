@@ -1,9 +1,10 @@
 package io.konad.usage.examples.model
 
-import io.konad.*
-import io.konad.Result.Companion.plus
-import io.konad.applicative.builders.on
+import io.konad.Result
 import io.konad.applicative.builders.plus
+import io.konad.ifNull
+import io.konad.ok
+import io.konad.plus
 
 data class User(
     val username: String,
