@@ -83,6 +83,22 @@ class CreateNewUserTests : StringSpec({
         errors?.toList()?.joinToString(",") { it.description } shouldBe "xxx should match a valid phone number, but it doesn't,job description should not be null"
     }
 
+    "Example of cumulating errors with better error description using field" {
+        val user = ::User +
+            username.ok() +
+            NameOfAPerson(firstname, lastname) +
+            Password.of("123").field(User::password) +
+            UserContacts.of(emailValue, "xxx").field(User::contacts) +
+            "bla"
+
+        val expectedError = """
+            password: Password should be at least 6 characters length. It was 3 characters
+            contacts.phoneNumber: xxx should match a valid phone number, but it doesn't
+            """.trimIndent()
+        val ex = shouldThrow<ResultException> { user.get() }
+        ex.errors.description("\n") shouldBe expectedError
+    }
+
     "Example of build a nullable User" {
         val userContacts: UserContacts? = ::UserContacts +
             Email.of(emailValue).toNullable() +

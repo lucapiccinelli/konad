@@ -8,6 +8,7 @@ import io.konad.hkt.FunctorKind
 import io.konad.hkt.Kind
 import io.konad.hkt.MonadKind
 import io.konad.applicative.builders.on
+import kotlin.reflect.KProperty1
 
 sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<ResultOf, T>{
 
@@ -64,10 +65,10 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Errors -> null
     }
 
-    fun errorTitle(title: String): Result<T> = when(this) {
+    fun errorTitle(title: String, separator: String = ": "): Result<T> = when(this) {
         is Ok -> this
         is Errors -> copy(
-            error = error.copy(title = (error.title?.run { "$title: ${error.title}" } ?: title)),
+            error = error.copy(title = (error.title?.run { "$title$separator${error.title}" } ?: title)),
             prev = prev?.run { errorTitle(title) as Errors })
     }
 
@@ -76,6 +77,11 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
     override fun <R> flatMapK(fn: (T) -> MonadKind<ResultOf, R>): MonadKind<ResultOf, R> = flatMap { fn(it).result }
     override fun <R> apK(liftedFn: FunctorKind<ResultOf, (T) -> R>): ApplicativeFunctorKind<ResultOf, R> = ap(liftedFn.result)
 }
+
+
+
+inline fun <reified T, reified P> Result<P>.field(property: KProperty1<T, P>): Result<P> =
+    errorTitle(property.name, separator = ".")
 
 fun <T> Result<T>.ifError(defaultValue: T) = ifError { defaultValue }
 
