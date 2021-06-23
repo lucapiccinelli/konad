@@ -275,6 +275,19 @@ Similarly, `Validation` has the `mapFail` method, to apply a tranformation on th
 
 In case of accumulated errors, both `errorTitle` and `mapFail` are applied to the entire list of errors.
 
+### Result<T>.field
+
+Since version 1.2.2, there exist an extension method `Result<T>.field` that enables to add an error title in a type-safe manner.
+
+```kotlin
+fun of(firstname: String, lastname: String): Result<User> = ::User +
+    checkNotEmpty(firstname).field(User::firstname) + 
+    checkNotEmpty(lastname).field(User::lastname)
+```
+
+In this example, `field` will add the name of the property as an error title, while also checking at compile time if the type 
+of the property matches the type of the corresponding constructor parameter 
+
 ## Extend with your own composable monads
 
 If you wish to implement your own monads and let them be composable through the `on` **Konad applicative builders**, then you need to implement the interfaces
