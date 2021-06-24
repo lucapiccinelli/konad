@@ -38,7 +38,7 @@ add in pom.xml
 <dependency>
     <groupId>io.github.lucapiccinelli</groupId>
     <artifactId>konad</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ add in pom.xml
 add in build.gradle
 ```groovy
 dependencies {
-    implementation "io.github.lucapiccinelli:konad:1.2.2"
+    implementation "io.github.lucapiccinelli:konad:1.2.3"
 }
 ```
 
@@ -277,7 +277,7 @@ In case of accumulated errors, both `errorTitle` and `mapFail` are applied to th
 
 ### Result<T>.field
 
-Since version 1.2.2, there exist an extension method `Result<T>.field` that enables to add an error title in a type-safe manner.
+Since version 1.2.3, there exist an extension method `Result<T>.field` that enables to add an error title in a type-safe manner.
 
 ```kotlin
 fun of(firstname: String, lastname: String): Result<User> = ::User +

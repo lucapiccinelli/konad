@@ -19,8 +19,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
 
         val description = description(" - ")
 
-        fun description(errorDescriptionsSeparator: String = ",") = toList()
-            .joinToString(errorDescriptionsSeparator) { error -> error.title?.run { "$this: ${error.description}" } ?: error.description }
+        fun description(errorDescriptionsSeparator: String = ",") = toList().string(errorDescriptionsSeparator)
 
         fun toList(): Collection<Error> = (prev
             ?.run { toList() }
