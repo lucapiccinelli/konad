@@ -50,7 +50,7 @@ sealed class Validation<A, out B>: MonadKind2<ValidationOf, A, B>, ApplicativeFu
         is Fail -> transform(fn)
     }
 
-    fun <D> mapAllFailures(fn: (Collection<A>) -> D): Validation<D, B> = when(this){
+    inline fun <D> mapAllFailures(fn: (Collection<A>) -> D): Validation<D, B> = when(this){
         is Success -> Success(success)
         is Fail -> Fail(fn(failures()))
     }
@@ -83,7 +83,7 @@ fun <A, B> Validation<A, B>.ifFail(default: B): B = when(this){
     is Validation.Success -> success
 }
 
-fun <A, B> Validation<A, B>.ifFail(errorHandler: (Collection<A>) -> B): B = when(this){
+inline fun <A, B> Validation<A, B>.ifFail(errorHandler: (Collection<A>) -> B): B = when(this){
     is Validation.Fail -> errorHandler(failures())
     is Validation.Success -> success
 }
@@ -92,12 +92,12 @@ fun <A, B> Collection<Validation<A, B>>.flatten(): Validation<A, Collection<B>> 
     flatten(Validation.Companion::pure)
     .validation
 
-fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
+inline fun <A, B> Result<B>.ifErrors(errorTransform: (Result.Errors) -> A): Validation<A, B> = when(this){
     is Result.Ok -> value.success()
     is Result.Errors -> errorTransform(this).fail()
 }
 
-fun <A, B> B?.ifNullValidation(errorTransform: () -> A): Validation<A, B> = this
+inline fun <A, B> B?.ifNullValidation(errorTransform: () -> A): Validation<A, B> = this
     ?.run { this.success() }
     ?: errorTransform().fail()
 

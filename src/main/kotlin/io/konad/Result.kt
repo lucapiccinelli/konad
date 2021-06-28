@@ -84,7 +84,7 @@ inline fun <reified T, reified P> Result<P>.field(property: KProperty1<T, P>): R
 
 fun <T> Result<T>.ifError(defaultValue: T) = ifError { defaultValue }
 
-fun <T> Result<T>.ifError(errorHandler: (Result.Errors) -> T) = when(this){
+inline fun <T> Result<T>.ifError(errorHandler: (Result.Errors) -> T) = when(this){
     is Result.Ok -> value
     is Result.Errors -> errorHandler(this)
 }
