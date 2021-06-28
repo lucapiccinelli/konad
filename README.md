@@ -38,7 +38,7 @@ add in pom.xml
 <dependency>
     <groupId>io.github.lucapiccinelli</groupId>
     <artifactId>konad</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ add in pom.xml
 add in build.gradle
 ```groovy
 dependencies {
-    implementation "io.github.lucapiccinelli:konad:1.2.4"
+    implementation "io.github.lucapiccinelli:konad:1.2.5"
 }
 ```
 

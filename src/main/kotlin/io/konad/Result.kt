@@ -68,7 +68,7 @@ sealed class Result<out T>: ApplicativeFunctorKind<ResultOf, T>, MonadKind<Resul
         is Ok -> this
         is Errors -> copy(
             error = error.copy(title = (error.title?.run { "$title$separator${error.title}" } ?: title)),
-            prev = prev?.run { errorTitle(title) as Errors })
+            prev = prev?.run { errorTitle(title, separator) as Errors })
     }
 
     override fun <R> mapK(fn: (T) -> R): FunctorKind<ResultOf, R> = map(fn)
