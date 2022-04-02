@@ -52,7 +52,6 @@
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>4.12</junit.version>
         <kotest.version>5.2.2</kotest.version>
-        <dokka.version>1.6.10</dokka.version>
     </properties>
 
     <profiles>
@@ -230,7 +229,7 @@
             <plugin>
                 <groupId>org.jetbrains.dokka</groupId>
                 <artifactId>dokka-maven-plugin</artifactId>
-                <version>${dokka.version}</version>
+                <version>1.4.20</version>
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
