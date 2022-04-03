@@ -8,6 +8,7 @@
     <version>1.2.6</version>
     <modules>
         <module>konad</module>
+        <module>konad-annotations</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -39,8 +40,6 @@
         <junit.version>4.12</junit.version>
         <kotest.version>5.2.2</kotest.version>
     </properties>
-
-
 
     <dependencies>
         <dependency>
