@@ -16,9 +16,9 @@ Also, Arrow is a real functional library, with a plenty of functional concepts t
 ## Konad to the OOP rescue
 
 Here it comes Konad. It has only three classes:
- - [**Result**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
- - [**Validation**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Validation.kt): can be `Validation.Success` or `Validation.Fail`.
- - [**Maybe**](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
+ - [**Result**](konad/src/main/kotlin/io/konad/Result.kt): can be `Result.Ok` or `Result.Errors`.
+ - [**Validation**](konad/src/main/kotlin/io/konad/Validation.kt): can be `Validation.Success` or `Validation.Fail`.
+ - [**Maybe**](konad/src/main/kotlin/io/konad/Maybe.kt): you know this... yet another Optional/Option/Nullable whatever. (But read the [Maybe](#maybe) section below, it will get clear why we need it)
  
 These are **monads** and **applicative functors**, so they implement the usual `map`, `flatMap` and `ap` methods. 
 
@@ -52,8 +52,8 @@ dependencies {
 
 ## Usage example
 
-*For an exaustive list of usage examples, please refer to test suite [CreateNewUserTests.kt](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/usage/examples/CreateNewUserTests.kt)
-and to [ResultTests.kt](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ResultTests.kt)*
+*For an exaustive list of usage examples, please refer to test suite [CreateNewUserTests.kt](konad/src/test/kotlin/io/konad/usage/examples/CreateNewUserTests.kt)
+and to [ResultTests.kt](konad/src/test/kotlin/io/konad/ResultTests.kt)*
 
 Let's say you have a `User` class, that has an `Email` and a `PhoneNumber`. Email and PhoneNumber are built so that they can only be constructed using a factory method. It will return a `Result.Errors` type if the value passed is not valid.
 
@@ -109,8 +109,8 @@ In order to compose them and get a `Result<User>` you have to do the following
 
 Composition happens thanks to concepts named **functors** and **applicative Functors**.
 
-I chose to stay simple and practical, then all the methods that implement composition are called `on` (See [applicativeBuilders.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt)).
-However, for those who love the functional naming, you can choose this other style. (See [applicativeBuildersPureStyle.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/applicative/builders/applicativeBuildersPureStyle.kt))
+I chose to stay simple and practical, then all the methods that implement composition are called `on` (See [applicativeBuilders.kt](konad/src/main/kotlin/io/konad/applicative/builders/applicativeBuilders.kt)).
+However, for those who love the functional naming, you can choose this other style. (See [applicativeBuildersPureStyle.kt](konad/src/main/kotlin/io/konad/applicative/builders/applicativeBuildersPureStyle.kt))
 
 ```kotlin
 
@@ -126,7 +126,7 @@ However, for those who love the functional naming, you can choose this other sty
 <a name="maybe"></a>
 ## Maybe
 
-`Maybe` is needed only to wrap Kotlin *nullables* and bring them to a **higher-kinded type** (see [unaryHigherKindedTypes.kt](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)). 
+`Maybe` is needed only to wrap Kotlin *nullables* and bring them to a **higher-kinded type** (see [unaryHigherKindedTypes.kt](konad/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)). 
 In this way `on`, can be used to compose nullables. 
 
 Its constructor is private because **you should avoid using it** in order to express *optionality*. Kotlin nullability is perfect for that purpose.
@@ -268,10 +268,10 @@ fun of(firstname: String, lastname: String): Result<User> = ::User.curry()
 ```
 
 You can find a more detailed specification here:
-[ResultTests](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ResultTests.kt#L106)
+[ResultTests](konad/src/test/kotlin/io/konad/ResultTests.kt#L106)
 
 Similarly, `Validation` has the `mapFail` method, to apply a tranformation on the error case. Examples here
-[ValidationTests](https://github.com/lucapiccinelli/konad/blob/master/src/test/kotlin/io/konad/ValidationTests.kt#L101)
+[ValidationTests](konad/src/test/kotlin/io/konad/ValidationTests.kt#L101)
 
 In case of accumulated errors, both `errorTitle` and `mapFail` are applied to the entire list of errors.
 
@@ -291,7 +291,7 @@ of the property matches the type of the corresponding constructor parameter
 ## Extend with your own composable monads
 
 If you wish to implement your own monads and let them be composable through the `on` **Konad applicative builders**, then you need to implement the interfaces
-that are here: [Higher-kinded types](https://github.com/lucapiccinelli/konad/blob/master/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)
+that are here: [Higher-kinded types](konad/src/main/kotlin/io/konad/hkt/unaryHigherKindedTypes.kt)
 
 Actually, to let your type be composable, it is enough to implement the `ApplicativeFunctorKind` interface.
 
