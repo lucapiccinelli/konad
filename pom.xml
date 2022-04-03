@@ -4,9 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.lucapiccinelli</groupId>
-    <artifactId>konad</artifactId>
+    <artifactId>konad-parent</artifactId>
     <version>1.2.6</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>konad</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>io.github.lucapiccinelli konad</name>
     <description>Simple Kotlin monads for every day error handling</description>
@@ -29,23 +32,6 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/lucapiccinelli/konad.git</connection>
-        <developerConnection>scm:git:ssh://github.com:lucapiccinelli/konad.git</developerConnection>
-        <url>https://github.com/lucapiccinelli/konad/tree/master</url>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.6.10</kotlin.version>
@@ -54,36 +40,7 @@
         <kotest.version>5.2.2</kotest.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>publish</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <!-- Prevent `gpg` from using pinentry programs -->
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+
 
     <dependencies>
         <dependency>
@@ -134,18 +91,7 @@
         <!-- /kotest -->
     </dependencies>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>https://jcenter.bintray.com/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
     <build>
-        <sourceDirectory>src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
-
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -198,48 +144,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jetbrains.dokka</groupId>
-                <artifactId>dokka-maven-plugin</artifactId>
-                <version>1.4.20</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>dokka</goal>
-                            <goal>javadoc</goal>
-                            <goal>javadocJar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
