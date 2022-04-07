@@ -9,14 +9,16 @@ class Curry(private val genericsAlphabet: List<String>? = null) {
     }
 
     fun generate(maxArgs: Int, name: String = "curry"): String {
-        val genericsTable = genericsAlphabet?.take(maxArgs)
-            ?: GenericsHelper.generateAlphabet(baseAlphabet, (maxArgs / baseAlphabet.size) + 1).take(maxArgs)
+        val genericsTable = getGenericsTable(maxArgs)
         val genericsList = genericsTable.joinToString(", ") { it }
 
         return "fun <$genericsList, RESULT> (($genericsList) -> RESULT).$name() = ${
             recurseCurry(genericsTable, genericsTable)
         }"
     }
+
+    private fun getGenericsTable(maxArgs: Int) = (genericsAlphabet
+        ?: GenericsHelper.generateAlphabet(baseAlphabet, (maxArgs / baseAlphabet.size) + 1)).take(maxArgs)
 
     private fun recurseCurry(args: List<String>, currentArgs: List<String>): String {
         val currentArg = currentArgs[0]
