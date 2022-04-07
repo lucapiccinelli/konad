@@ -11,6 +11,14 @@
 
     <artifactId>konad</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.lucapiccinelli</groupId>
+            <artifactId>konad-annotations</artifactId>
+            <version>1.2.6</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
     <distributionManagement>
         <snapshotRepository>

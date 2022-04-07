@@ -9,6 +9,7 @@
     <modules>
         <module>konad</module>
         <module>konad-annotations</module>
+        <module>konad-processor</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -37,7 +38,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.6.10</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.2</junit.version>
         <kotest.version>5.2.2</kotest.version>
     </properties>
 
@@ -84,6 +85,13 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-property-jvm</artifactId>
+            <version>${kotest.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.kotest</groupId>
+            <artifactId>kotest-framework-datatest-jvm</artifactId>
             <version>${kotest.version}</version>
             <scope>test</scope>
         </dependency>
