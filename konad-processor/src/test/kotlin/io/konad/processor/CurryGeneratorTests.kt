@@ -11,7 +11,18 @@ class CurryGeneratorTests : FunSpec({
             2 to "fun <A, B, RESULT> ((A, B) -> RESULT).curry() = { a: A -> { b: B -> this(a, b) } }",
             3 to "fun <A, B, C, RESULT> ((A, B, C) -> RESULT).curry() = { a: A -> { b: B -> { c: C -> this(a, b, c) } } }",
         ){ (depth, expectedCurryFn) ->
-            Curry(depth).generate() shouldBe expectedCurryFn
+            Curry().generate(depth) shouldBe expectedCurryFn
+        }
+    }
+
+    val alphabet = GenericsHelper.generateAlphabet(Curry.baseAlphabet, 20)
+    context("can nest as many curries as input requires with a provided alphabet"){
+        withData(
+            1 to "fun <A, RESULT> ((A) -> RESULT).curry() = { a: A -> this(a) }",
+            2 to "fun <A, B, RESULT> ((A, B) -> RESULT).curry() = { a: A -> { b: B -> this(a, b) } }",
+            3 to "fun <A, B, C, RESULT> ((A, B, C) -> RESULT).curry() = { a: A -> { b: B -> { c: C -> this(a, b, c) } } }",
+        ){ (depth, expectedCurryFn) ->
+            Curry(alphabet).generate(depth) shouldBe expectedCurryFn
         }
     }
 })

@@ -1,14 +1,16 @@
 package io.konad.processor
 
-class Curry(private val maxArgs: Int) {
-    private val baseAlphabet = listOf(
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-        "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"
-    )
-    private val genericsAlphabet = GenericsHelper.generateAlphabet(baseAlphabet, (maxArgs / baseAlphabet.size) + 1)
+class Curry(private val genericsAlphabet: List<String>? = null) {
+    companion object {
+        val baseAlphabet = listOf(
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
+            "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"
+        )
+    }
 
-    fun generate(name: String = "curry"): String {
-        val genericsTable = genericsAlphabet.take(maxArgs)
+    fun generate(maxArgs: Int, name: String = "curry"): String {
+        val genericsTable = genericsAlphabet?.take(maxArgs)
+            ?: GenericsHelper.generateAlphabet(baseAlphabet, (maxArgs / baseAlphabet.size) + 1).take(maxArgs)
         val genericsList = genericsTable.joinToString(", ") { it }
 
         return "fun <$genericsList, RESULT> (($genericsList) -> RESULT).$name() = ${
