@@ -1,15 +1,9 @@
 package io.konad
 
-import ApplicativeFunctorKind2
-import Kind2_
-import MonadKind2
 import io.konad.applicative.flatten
 import io.konad.exceptions.EitherException
-import io.konad.hkt.ApplicativeFunctorKind
-import io.konad.hkt.FunctorKind
-import io.konad.hkt.Kind
-import io.konad.hkt.MonadKind
 import io.konad.applicative.builders.on
+import io.konad.hkt.*
 
 open class ValidationOf
 

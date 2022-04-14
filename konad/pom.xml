@@ -16,7 +16,12 @@
             <groupId>io.github.lucapiccinelli</groupId>
             <artifactId>konad-annotations</artifactId>
             <version>1.2.6</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.lucapiccinelli</groupId>
+            <artifactId>konad-processor</artifactId>
+            <version>1.2.6</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -75,6 +80,59 @@
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
 
         <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>io.github.lucapiccinelli</groupId>
+                                    <artifactId>konad-processor</artifactId>
+                                    <version>1.2.6</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>11</jvmTarget>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>

@@ -1,4 +1,4 @@
 package io.konad.annotations
 
 @Retention(AnnotationRetention.SOURCE)
-annotation class Curry(val depth: Int = 200)
+annotation class Curry(val argsNum: Int = 200)

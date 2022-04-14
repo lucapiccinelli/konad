@@ -1,7 +1,4 @@
-import io.konad.hkt.ApplicativeFunctorKind
-import io.konad.hkt.FunctorKind
-import io.konad.hkt.Kind
-import io.konad.hkt.MonadKind
+package io.konad.hkt
 
 interface Kind2<out F, out A, out B>: Kind<Kind<F, A>, B>
 interface FunctorKind2<out F, out A, out B>: Kind2<F, A, B>, FunctorKind<Kind<F, A>, B>
